@@ -7,20 +7,23 @@ import reducer from '~/render/script/reducer';
 import { createStore, } from 'redux';
 import '~/render/style/index.css';
 
+const preload = {
+  content: {
+    index: { 'plugin1:instance1': 0, 'plugin1:instace2': 1 },
+    contents: [[{ instance: 'plugin1:instance1', }], [{ instance: 'plugin1:instance2' }],],
+  },
+  instance: {
+    instance: 'plugin1',
+    instances: ['plugin1', 'plugin2' ],
+  },
+};
+
 const store = createStore(
   reducer,
-  {
-    content: {
-      index: { 'plugin1:instance1': 0, 'plugin1:instace2': 1 },
-      contents: [[{ instance: 'plugin1:instance1', }], [{ instance: 'plugin1:instance2' }],],
-    },
-    instance: {
-      instance: 'plugin1',
-      instances: ['plugin1', 'plugin2' ],
-    },
-  },
+  preload,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
+
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
