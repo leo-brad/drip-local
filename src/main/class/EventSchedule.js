@@ -38,7 +38,7 @@ class EventSchedule {
 
   sendPackages() {
     const plugins = getPackages();
-    const event = 'plugin';
+    const event = 'package';
     this.writeData([event, plugins]);
   }
 

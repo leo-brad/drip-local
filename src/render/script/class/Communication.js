@@ -35,7 +35,7 @@ class Communication {
             break;
         }
       }
-      if (event === 'plugin') {
+      if (event === 'package') {
         const [_, plugins,] = data;
         this.store.dispatch(updatePlugins(plugins));
       }
