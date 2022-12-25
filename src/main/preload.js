@@ -5,7 +5,6 @@ import configExec from '~/main/lib/configExec';
 import Ipc from '~/main/class/Ipc';
 
 const ipc = new Ipc();
-
 contextBridge.exposeInMainWorld('ipc', {
   on: ipc.on.bind(ipc),
 });

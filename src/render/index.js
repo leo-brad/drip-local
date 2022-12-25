@@ -5,10 +5,9 @@ import { HashRouter, Routes, Route, } from 'react-router-dom';
 import store from '~/render/script/store';
 import Home from '~/render/script/page/Home';
 import '~/render/style/index.css';
-import Communication from '~/render/script/class/Communication';
+import communicate from '~/render/script/lib/communicate';
 
-new Communication(store).start();
-
+communicate(store);
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
