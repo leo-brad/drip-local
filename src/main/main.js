@@ -1,8 +1,33 @@
-import electron from '~/main/lib/electron';
-import ConfigExec from '~/main/class/ConfigExec';
+import fs from 'fs';
+import { app, BrowserWindow, } from 'electron';
+import path from 'path';
 
-const [_1, _2, configString, projectPath] = process.argv;
-const config = JSON.parse(configString);
-new ConfigExec({ config, projectPath, }).start();
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 900,
+    height: 700,
+    webPreferences: {
+      preload: path.resolve(__dirname, 'preload.js'),
+    },
+  });
+  win.webContents.openDevTools();
+  win.loadFile('./index.html');
+  const [_1, _2, configString, projectPath] = process.argv;
+  const argv = JSON.stringify([configString, projectPath]);
+  fs.writeFileSync(path.join(__dirname, 'argv'), argv);
+}
 
-electron.start();
+app.whenReady().then(() => {
+  createWindow();
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});

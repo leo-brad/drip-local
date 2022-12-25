@@ -4,19 +4,14 @@ import { addInstance, reduceInstance, } from '~/render/script/action/instance';
 import { updatePlugins, } from '~/render/script/action/plugins';
 
 class Communication {
-  constructor({ store, }) {
+  constructor(store) {
     this.store = store;
   }
 
   start() {
-    this.bindEvent();
-  }
-
-  bindEvent() {
     const { store, } = this;
     const { ipc, } = window;
-    ipc.on('drip', (json) => {
-      const data = JSON.parse(json);
+    ipc.on('drip', (data) => {
       const [event,] = data;
       if (event === 'proc') {
         const [_, instance, field, string, ] = data;

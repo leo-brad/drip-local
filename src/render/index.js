@@ -7,7 +7,8 @@ import Home from '~/render/script/page/Home';
 import '~/render/style/index.css';
 import Communication from '~/render/script/class/Communication';
 
-new Communication({ store, }).start();
+new Communication(store).start();
+
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>

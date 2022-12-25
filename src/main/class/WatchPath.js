@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 class WatchPath {
-  constructor({ emitter, config={}, }) {
+  constructor(emitter, config) {
     this.emitter = emitter;
     this.config = config;
     this.events = [];
@@ -17,9 +17,7 @@ class WatchPath {
   updateEvents() {
     const { config, } = this;
     const {
-      core: {
-        interval=0,
-      }
+      interval=0,
     } = config;
     global.setInterval(() => {
       this.events = [];
@@ -31,7 +29,7 @@ class WatchPath {
       fs.readdirSync(location, {
         withFileTyps: true,
       }).forEach((n) => {
-        if (!this.check(location)) {
+        if (!this.check(n)) {
           this.recurse(path.join(location, n));
         }
       });
@@ -83,8 +81,8 @@ class WatchPath {
     } = config;
     let ans = false;
     if (
-      /^\/.drip\/local\/instance\/\[(\w+)\]:(\w+)$/
-      .test(path.resolve(location))
+      /^\.drip\/local\/instance\/\[(\w+)\]:(\w+)$/
+      .test(path.relative('.', location))
     ) {
       return ans;
     }

@@ -1,58 +1,52 @@
 import path from 'path';
 import net from 'net';
+import os from 'os';
+import InstanceCache from '~/main/class/InstanceCache';
+import InstanceIndex from '~/main/class/InstanceIndex';
 import WatchPath from '~/main/class/WatchPath';
-import PoolSize from '~/main/class/PoolSize';
+import getPoolSize from '~/main/lib/getPoolSize';
 import ProcPool from '~/main/class/ProcPool';
-import HashFile from '~/main/class/HashFile';
-import { getPackages, } from '~/main/lib/pkg';
+import { getPackages, } from '~/main/lib/package';
 
 class EventSchedule {
-  constructor({ priProcs=[], emitter=null, config={}, }) {
+  constructor(pps, emitter, config, ipc) {
     this.pool = [];
+    this.config = config;
     this.emitter = emitter;
-    this.priProcs = priProcs;
-    //this.hf = new HashFile({});
-    this.size = new PoolSize(config).size;
-    this.watchPath = new WatchPath({ emitter, config, });
+    this.ipc = ipc;
+    this.pps = pps;
+    this.ii = new InstanceIndex(2);
+    this.ic = new InstanceCache();
+    this.size = getPoolSize(config);
+    this.wp = new WatchPath(emitter, config);
   }
 
   start() {
-    this.initSocket();
+    this.sendPackages();
+    this.bindEvent();
+    this.wp.start();
+    this.fillProcPool();
   }
 
   writeData(data) {
-    const { socket, } = this;
-    socket.write(JSON.stringify(data));
-  }
-
-  initSocket() {
-    const server = net.createServer((socket) => {
-      this.socket = socket;
-      this.sendPackages();
-      this.bindEvent();
-      this.watchPath.start();
-      this.fillProcPool();
-    });
-    server.listen(3000);
+    const { ipc, } = this;
+    ipc.send('drip', data);
   }
 
   sendPackages() {
-    const plugins = getPackages();
+    const packages = getPackages();
     const event = 'package';
-    this.writeData([event, plugins]);
+    this.writeData([event, packages]);
   }
 
   fillProcPool(location) {
-    this.procPool = new ProcPool(this.size);
-    const { priProcs, procPool, } = this;
-    priProcs.forEach(({ pri, proc, }) => {
-      procPool.addPriProc(pri, proc);
+    this.pp = new ProcPool(this.size);
+    const { pps, pp, } = this;
+    pps.forEach(({ pri, proc, }) => {
+      pp.addPriProc(pri, proc);
     });
-    procPool.updatePool();
-    this.pool = procPool.getPool().map((proc) => {
-      proc.start();
-      return proc;
-    });
+    pp.updatePool();
+    this.pool = pp.getPool().map((proc) => proc.start());
   }
 
   cleanProcPool() {
@@ -62,15 +56,29 @@ class EventSchedule {
     }
   }
 
+  checkFreeMemory() {
+    const {
+      minMem,
+    } = this.config;
+    let ans = true;
+    if (os.freemem() / 1024 ** 2 > minMem) {
+      ans = false;
+    }
+    return ans;
+  }
+
   bindEvent() {
-    const { emitter, socket, } = this;
+    const { ic, emitter, socket, } = this;
     emitter.on('file', (eventType, location) => {
       if (
-        /^\/.drip\/local\/instance\/\[(\w+)\]:(\w+)$/
-        .test(path.resolve(location))
+        /^\.drip\/local\/instance\/\[(\w+)\]:(\w+)$/
+        .test(path.relative('.', location))
       ) {
-        //const { hf, } = this;
-        //hf.indexFile(location);
+        const regexp = /^\.drip\/local\/instance\/\[(\w+)\]:(\w+)$/
+        const [_, pkg, instance] = path.relative('.', location).match(regexp);
+        const { ii, } = this;
+        const record = ii.indexInstance(location);
+        ic.cache(pkg, instance, record);
       } else {
         this.cleanProcPool();
         this.fillProcPool(location);
@@ -78,6 +86,10 @@ class EventSchedule {
     });
     emitter.on('proc', async ({ field, instance, data='', id, }) => {
       const event = 'proc';
+      switch (field) {
+        case 'end':
+          break;
+      }
       this.writeData([event, instance, field, data, id,]);
     });
   }

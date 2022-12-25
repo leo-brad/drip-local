@@ -6,11 +6,11 @@ class Instance {
   constructor(config, emitter,) {
     const {
       core: {
-        packages=[],
+        plugins=[],
       },
     } = config;
     this.emitter = emitter;
-    this.packages= packages;
+    this.plugins = plugins;
   }
 
   getPriProcs() {
@@ -19,7 +19,7 @@ class Instance {
 
   iteratorInstance() {
     const ans = [];
-    const { packages, emitter, } = this;
+    const { plugins, emitter, } = this;
     const instancePath = path.normalize('.drip/local/instance');
     if (fs.existsSync(instancePath)) {
       fs.readdirSync(instancePath, {
@@ -29,7 +29,7 @@ class Instance {
         if (regexp.test(i)) {
           const [_, pkg] = i.match(regexp);
           const config = fs.readFileSync(fs.openSync(path.join(instancePath, i), 'r')).toString();
-          if (packages.includes(pkg)) {
+          if (plugins.includes(pkg)) {
             const proc = new Proc({
               command: 'node',
               args: [
