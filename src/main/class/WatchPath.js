@@ -75,9 +75,7 @@ class WatchPath {
   check(location) {
     const { config, } = this;
     const {
-      core: {
-        ignores=[],
-      }
+      ignores=[],
     } = config;
     let ans = false;
     if (
