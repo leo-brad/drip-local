@@ -6,7 +6,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     instance: state.instance,
     content: state.content,
-    plugins: state.plugins,
+    pkg: state.pkg,
   };
 }
 

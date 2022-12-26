@@ -1,7 +1,7 @@
 import React from 'react';
 import { updateContent, } from '~/render/script/action/content';
 import { addInstance, reduceInstance, } from '~/render/script/action/instance';
-import { updatePlugins, } from '~/render/script/action/plugins';
+import { updatePkg, } from '~/render/script/action/pkg';
 
 export default function communicate(store) {
   const { ipc, } = window;
@@ -25,9 +25,8 @@ export default function communicate(store) {
       }
     }
     if (event === 'package') {
-      const [_, plugins,] = data;
-      store.dispatch(updatePlugins(plugins));
+      const [_, pkg,] = data;
+      store.dispatch(updatePkg(pkg));
     }
-    console.log(JSON.stringify(store.getState()));
   });
 }

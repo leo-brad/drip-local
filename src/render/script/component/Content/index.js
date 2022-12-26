@@ -11,8 +11,8 @@ class Content extends React.Component {
       instance: {
         instance: i,
       },
-      plugins: {
-        plugins,
+      pkg: {
+        pkg,
       },
     } = this.props;
     const idx = index[i];
@@ -20,11 +20,11 @@ class Content extends React.Component {
     if (typeof idx === 'number' && contents[idx]) {
       content = contents[idx].map((e, j) => {
         const { instance, field, string, } = e;
-        const [_, plugin] = instance.match(/^\[(\w+)\]:(\w+)$/);
-        const Plugin = plugins[plugin];
+        const [_, p] = instance.match(/^\[(\w+)\]:(\w+)$/);
+        const Pkg = pkg[p];
         return (
           <li key={j}>
-            <Plugin situation={field} string={string} serial={j+1} />
+            <Pkg situation={field} string={string} serial={j+1} />
           </li>
         );
       });
