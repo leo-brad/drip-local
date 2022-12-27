@@ -24,5 +24,11 @@ export default function instanceReducer(state = { instance: '', instances: [], }
     const { instance, } = action;
     ans = { ...state, instance, };
   }
+  if (action.type === 'main/restart') {
+    ans = {
+      instance: '',
+      instances: [],
+    };
+  }
   return ans;
 }

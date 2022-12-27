@@ -35,7 +35,7 @@ class EventSchedule {
 
   sendPackages() {
     const packages = getPackages();
-    const event = 'package';
+    const event = 'pkg';
     this.writeData([event, packages]);
   }
 
@@ -54,6 +54,8 @@ class EventSchedule {
     for (let i = 0; i < pool.length; i += 1) {
       pool[i].getProc().kill(2);
     }
+    const event = 'restart';
+    this.writeData([event]);
   }
 
   checkFreeMemory() {

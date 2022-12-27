@@ -16,5 +16,11 @@ export default function contentReducer(state = { index: {}, contents: [], }, act
       contents: contents,
     };
   }
+  if (action.type === 'main/restart') {
+    ans = {
+      index: {},
+      contents: [],
+    };
+  }
   return ans;
 }
