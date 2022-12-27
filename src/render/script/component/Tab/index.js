@@ -6,8 +6,10 @@ import InstanceIcon from '~/render/script/component/InstanceIcon';
 class Tab extends React.Component {
   componentDidMount() {
     document.getElementById('tab-header').addEventListener('click', (e) => {
-      const [_, instance] = e.target.id.split('-');
-      this.props.changeInstance(instance);
+      if (e.target.id !== 'tab-header') {
+        const [_, instance] = e.target.id.split('-');
+        this.props.changeInstance(instance);
+      }
     });
   }
 
