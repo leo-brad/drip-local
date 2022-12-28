@@ -1,12 +1,12 @@
 import React from 'react';
 import style from './index.module.css';
 import Content from '~/render/script/component/Content';
-import InstanceIcon from '~/render/script/component/InstanceIcon';
+import TabButton from '~/render/script/component/TabButton';
 
 class Tab extends React.Component {
   componentDidMount() {
     document.getElementById('tab-header').addEventListener('click', (e) => {
-      if (e.target.id !== 'tab-header') {
+      if (/^button-/.test(e.target.id)) {
         const [_, instance] = e.target.id.split('-');
         this.props.changeInstance(instance);
       }
@@ -14,20 +14,10 @@ class Tab extends React.Component {
   }
 
   render() {
-    const { instance: { instances, instance, }, } = this.props;
-    const buttons = instances.map((i, k) => {
-      return (
-        <button key={k} id={'button-' + i}
-          className={[
-            style.tabButton,
-            style.tabButtonFirst,
-            instance === i ? style.active : null,
-          ].join(' ')}
-        >
-          <InstanceIcon />{i}
-        </button>
-      );
-    });
+    const { instance: { instances, instance, }, status, } = this.props;
+    const buttons = instances.map(
+      (i, k) => <TabButton i={i} key={k} instance={instance} status={status} />
+    );
     return (
       <div className={style.tab}>
         <div id='tab-header' className={style.tabHeader}>

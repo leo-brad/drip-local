@@ -3,6 +3,7 @@ import { updateContent, } from '~/render/script/action/content';
 import { addInstance, reduceInstance, } from '~/render/script/action/instance';
 import { updatePkg, } from '~/render/script/action/pkg';
 import { restartMain, } from '~/render/script/action/main';
+import { updateStatus, } from '~/render/script/action/status';
 
 export default function communicate(store) {
   const { ipc, } = window;
@@ -14,6 +15,7 @@ export default function communicate(store) {
         case 'stdout':
         case 'stderr':
           store.dispatch(updateContent({ instance, field, string, }));
+          store.dispatch(updateStatus({ instance, field, }));
           break;
         case 'new':
           store.dispatch(addInstance(instance));
@@ -26,7 +28,7 @@ export default function communicate(store) {
       }
     }
     if (event === 'pkg') {
-      const [_, pkg,] = data;
+      const [_, pkg] = data;
       store.dispatch(updatePkg(pkg));
     }
     if (event === 'restart') {
@@ -34,3 +36,4 @@ export default function communicate(store) {
     }
   });
 }
+

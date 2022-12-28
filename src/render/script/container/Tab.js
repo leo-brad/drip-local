@@ -7,6 +7,7 @@ const mapStateToProps = (state, ownProps) => {
     instance: state.instance,
     content: state.content,
     pkg: state.pkg,
+    status: state.status,
   };
 }
 

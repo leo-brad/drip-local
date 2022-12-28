@@ -1,0 +1,55 @@
+@keyframes spin
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)
+
+.loader
+  display: inline-block
+  margin-left: 7px
+.loader::before
+  display: inline-block
+.wait
+  width: 12px
+  height: 12px
+  border-radius: 12px
+  border: 3px solid rgb(40, 40, 40)
+  animation-name: spin
+  animation-iteration-count: infinite
+  animation-duration: 1s
+.wait::before
+  content: ''
+  display: inline-block
+  position: relative
+  width: 12px
+  height: 12px
+  left: -3px
+  top: -3px
+  border-radius: 12px
+  border-width: 3px
+  border-style: solid
+  border-color: transparent transparent rgb(40, 40, 255) rgb(40, 40, 255)
+.success::before
+  display: inline-flex
+  justify-content: center
+  align-items: center
+  content: '\f00c'
+  font-size: 13px
+  color: #fff
+  width: 21px
+  height: 21px
+  border-radius: 20px
+  background-color: rgb(70, 190, 70)
+  box-shadow: -0.5px -0.5px 3.5px rgb(55, 155, 55) inset, 0.5px 0.5px 3.5px rgb(55, 155, 55) inset
+.error::before
+  display: inline-flex
+  justify-content: center
+  align-items: center
+  content: '\f00d'
+  font-size: 13px
+  color: #fff
+  width: 21px
+  height: 21px
+  border-radius: 20px
+  background-color: rgb(195, 95, 95)
+  box-shadow: -0.5px -0.5px 3.5px rgb(165, 65, 65) inset, 0.5px 0.5px 3.5px rgb(165, 65, 65) inset
