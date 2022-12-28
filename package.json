@@ -9,7 +9,8 @@
     "lint": "eslint ./src",
     "build": "gulp build",
     "pro": "webpack --config webpack.config.pro.js",
-    "start": "yarn run build && yarn run pro && electron dist/main.js '{\"interval\":5000,\"minMem\":100,\"adjustCore\":0,\"ignores\":[\".drip/local/\",\".git/\",\".gitkeep\"],\"packages\":[\"[shell](/tmp/drip-package-shell-static/.git/)\"],\"indexLevel\":2}' '/tmp/example/'" },
+    "start": "yarn run build && yarn run pro && electron dist/main.js '{\"interval\":5000,\"minMem\":100,\"adjustCore\":0,\"ignores\":[\".drip/local/\",\".git/\",\".gitkeep\"],\"packages\":[\"[shell](/tmp/drip-package-shell-static/.git/)\"],\"indexLevel\":2}' '/tmp/example/'"
+  },
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
     "@fortawesome/fontawesome-free": "^5.15.4",
