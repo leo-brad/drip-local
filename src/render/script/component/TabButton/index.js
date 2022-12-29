@@ -6,7 +6,8 @@ import Loader from '~/render/script/component/Loader';
 class TabButton extends React.Component {
   render() {
     const { t, i, instance, status, } = this.props;
-    let cns = [style.tabButton, instance === i ? style.active : null];
+    const active = instance === i;
+    let cns = [style.tabButton, active ? style.active : null];
     switch (t) {
       case 'f':
         cns.push(style.tabButtonFirst);
@@ -21,7 +22,7 @@ class TabButton extends React.Component {
     <button
       id={'button-' + i} className={cns.join(' ')}
       >
-      <InstanceIcon />{i}<Loader status={status[i]} />
+      <InstanceIcon />{i}<Loader status={status[i]} active={active} />
     </button>;
     return button;
   }

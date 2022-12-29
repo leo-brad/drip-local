@@ -4,6 +4,8 @@
   to
     transform: rotate(360deg)
 
+.outer
+  position: relative
 .loader
   display: inline-block
   margin-left: 7px
