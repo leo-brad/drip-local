@@ -14,9 +14,36 @@ class Tab extends React.Component {
   }
 
   render() {
-    const { instance: { instances, instance, }, status, } = this.props;
+    const { instance: { instances, instance, }, status, changeInstance, } = this.props;
     const buttons = instances.map(
-      (i, k) => <TabButton i={i} key={k} instance={instance} status={status} />
+      (i, k) => {
+        switch (k) {
+          case 0:
+            return(
+              <
+                TabButton
+                t="f" i={i} key={k} instance={instance} status={status}
+                ci={changeInstance}
+              />
+            );
+          case instances.length - 1:
+            return(
+              <
+                TabButton
+                t="l" i={i} key={k} instance={instance} status={status}
+                ci={changeInstance}
+              />
+            );
+          default:
+            return(
+              <
+                TabButton
+                i={i} key={k} instance={instance} status={status}
+                ci={changeInstance}
+              />
+            );
+        }
+      }
     );
     return (
       <div className={style.tab}>

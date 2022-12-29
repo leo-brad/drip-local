@@ -39,7 +39,7 @@
   width: 21px
   height: 21px
   border-radius: 20px
-  background-color: rgb(70, 190, 70)
+  background-color: rgb(65, 185, 65)
   box-shadow: -0.5px -0.5px 3.5px rgb(55, 155, 55) inset, 0.5px 0.5px 3.5px rgb(55, 155, 55) inset
 .error::before
   display: inline-flex
@@ -51,5 +51,5 @@
   width: 21px
   height: 21px
   border-radius: 20px
-  background-color: rgb(191, 91, 91)
+  background-color: rgb(185, 85, 85)
   box-shadow: -0.5px -0.5px 3.5px rgb(165, 65, 65) inset, 0.5px 0.5px 3.5px rgb(165, 65, 65) inset

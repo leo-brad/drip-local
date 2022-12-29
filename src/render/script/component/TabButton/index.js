@@ -5,18 +5,25 @@ import Loader from '~/render/script/component/Loader';
 
 class TabButton extends React.Component {
   render() {
-    const { i, instance, status, } = this.props;
-    return (
-      <button id={'button-' + i}
-        className={[
-          style.tabButton,
-          style.tabButtonFirst,
-          instance === i ? style.active : null,
-        ].join(' ')}
+    const { t, i, instance, status, } = this.props;
+    let cns = [style.tabButton, instance === i ? style.active : null];
+    switch (t) {
+      case 'f':
+        cns.push(style.tabButtonFirst);
+        break;
+      case 'l':
+        cns.push(style.tabButtonLast);
+        break;
+      default:
+        break;
+    }
+    let button =
+    <button
+      id={'button-' + i} className={cns.join(' ')}
       >
-        <InstanceIcon />{i}<Loader status={status[i]} />
-      </button>
-    );
+      <InstanceIcon />{i}<Loader status={status[i]} />
+    </button>;
+    return button;
   }
 }
 

@@ -1,4 +1,5 @@
 .tabButton
+  position: relative
   display: inline-flex
   align-items: center
   font-size: 15.5px
@@ -18,4 +19,4 @@
   border-bottom-right-radius: 3px
 .active
   background: #f7f8fa linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1)) !important
-  box-shadow: 0 1px 0 1px rgb(255 255 255 / 30%) inset, 0 0 0 1px #adb2bb inset !important
+  box-shadow: 0 1px 0 1px rgb(255 255 255 / 30%) inset, 0 0 0 1px #adb2bb inset, 1.5px 0px 3px rgba(34, 36, 38, 0.15)
