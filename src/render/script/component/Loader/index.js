@@ -22,11 +22,7 @@ class Loader extends React.Component {
         </div>
         break;
       default:
-        loader =
-        <div className={style.outer}>
-          <Dimmer active={active} />
-          <span className={[style.loader, style.wait].join(' ')} />
-        </div>
+        loader = <span className={[style.loader, style.wait].join(' ')} />;
         break;
     }
     return loader;
