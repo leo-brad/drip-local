@@ -1,11 +1,12 @@
 import React from 'react';
-import { updateContent, } from '~/render/script/action/content';
 import { addInstance, reduceInstance, } from '~/render/script/action/instance';
-import { updatePkg, } from '~/render/script/action/pkg';
 import { restartMain, } from '~/render/script/action/main';
 import { updateStatus, } from '~/render/script/action/status';
+import addPkgs from '~/render/script/lib/addPkgs';
+import global from '~/render/script/obj/global';
 
 export default function communicate(store) {
+  const { emitter, } = global;
   const { ipc, } = window;
   ipc.on('drip', (data) => {
     const [event,] = data;
@@ -14,7 +15,7 @@ export default function communicate(store) {
       switch (field) {
         case 'stdout':
         case 'stderr':
-          store.dispatch(updateContent({ instance, field, string, }));
+          emitter.send('content/update', { instance, field, string, });
           store.dispatch(updateStatus({ instance, field, }));
           break;
         case 'new':
@@ -28,11 +29,12 @@ export default function communicate(store) {
       }
     }
     if (event === 'pkg') {
-      const [_, pkg] = data;
-      store.dispatch(updatePkg(pkg));
+      const [_, pkgs] = data;
+      addPkgs(pkgs);
     }
     if (event === 'restart') {
       store.dispatch(restartMain());
+      emitter.send('content/reset');
     }
   });
 }

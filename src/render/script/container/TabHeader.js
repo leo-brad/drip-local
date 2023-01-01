@@ -1,13 +1,10 @@
 import { connect, } from 'react-redux';
-import Tab from '~/render/script/component/Tab';
+import TabHeader from '~/render/script/component/TabHeader';
 import { changeInstance, } from '~/render/script/action/instance';
 
 const mapStateToProps = (state, ownProps) => {
   return {
     instance: state.instance,
-    content: state.content,
-    pkg: state.pkg,
-    status: state.status,
   };
 }
 
@@ -19,4 +16,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tab);
+export default connect(mapStateToProps, mapDispatchToProps)(TabHeader);

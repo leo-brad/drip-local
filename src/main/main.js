@@ -10,6 +10,7 @@ function createWindow() {
       preload: path.resolve(__dirname, 'preload.js'),
     },
   });
+  win.webContents.openDevTools();
   win.loadFile('./index.html');
   const [_1, _2, configString, projectPath] = process.argv;
   const argv = JSON.stringify([configString, projectPath]);

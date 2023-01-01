@@ -1,5 +1,5 @@
 import React from 'react';
-import Tab from '~/render/script/container/Tab';
+import Tab from '~/render/script/component/Tab';
 
 class Home extends React.Component {
   render() {

@@ -1,10 +1,9 @@
-export default function statusReducer(state = { status: {}, }, action) {
+export default function statusReducer(state = {}, action) {
   let ans = state;
   if (action.type === 'status/update') {
     const { instance, field, } = action;
-    const newStatus = {};
-    newStatus[instance] = field;
-    ans = { ...state, ...newStatus, };
+    ans[instance] = field;
+    ans = { ...ans, };
   }
   return ans;
 }
