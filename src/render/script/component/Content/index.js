@@ -5,21 +5,26 @@ import global from '~/render/script/obj/global';
 const { emitter, content, component, pkg, } = global;
 
 class Content extends React.Component {
+  constructor(props) {
+    super(props);
+    this.updateContent = this.updateContent.bind(this);
+  }
+
+  updateContent({ instance: i, }) {
+    const {
+      instance: { instance, },
+    } = this.props;
+    if (instance === i) {
+      this.forceUpdate();
+    }
+  }
+
   componentDidMount() {
-    emitter.on('content/update', ({ instance: i, }) => {
-      const {
-        instance: { instance, },
-      } = this.props;
-      if (instance === i) {
-        this.forceUpdate();
-      }
-    });
-    this.id = emitter.getId();
+    emitter.on('content/update', this.updateContent);
   }
 
   componentWillUnmount() {
-    const { id, } = this;
-    emitter.remove('content/update', id);
+    emitter.remove('content/update', this.updateContent);
   }
 
   render() {

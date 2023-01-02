@@ -1,5 +1,6 @@
 import { connect, } from 'react-redux';
 import TabButton from '~/render/script/component/TabButton';
+import { changeInstance, } from '~/render/script/action/instance';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -7,4 +8,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 }
 
-export default connect(mapStateToProps)(TabButton);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeInstance: (instance) => {
+      dispatch(changeInstance(instance));
+    }
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TabButton);

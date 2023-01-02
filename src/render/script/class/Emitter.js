@@ -1,16 +1,13 @@
 class Emitter {
   constructor() {
-    this.id = 0;
     this.callbacks = {};
   }
 
   send(event, data) {
     const { callbacks, } = this;
-    callbacks[event].forEach(({ callback, }) => callback(data));
-  }
-
-  getId() {
-    return this.id;
+    callbacks[event].forEach((callback) => {
+      callback(data);
+    });
   }
 
   on(event, callback) {
@@ -18,16 +15,13 @@ class Emitter {
     if (callbacks[event] === undefined) {
       callbacks[event] = [];
     }
-    this.id += 1;
-    const { id, } = this;
-    callbacks[event].push({ id, callback, });
+    callbacks[event].push(callback);
   }
 
-  remove(event, removeId) {
+  remove(event, callback) {
     const cbs = this.callbacks[event];
     for (let i = 0; i < cbs.length; i += 1) {
-      const { id, callback, } = cbs[i];
-      if (id === removeId) {
+      if (callback === cbs[i]) {
         cbs.splice(i, 1);
       }
     }

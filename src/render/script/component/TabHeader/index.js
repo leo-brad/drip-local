@@ -3,16 +3,6 @@ import style from './index.module.css';
 import TabButton from '~/render/script/container/TabButton';
 
 class TabHeader extends React.Component {
-  componentDidMount() {
-    const { changeInstance, } = this.props;
-    document.getElementById('tab-header').addEventListener('click', (e) => {
-      if (/^button-/.test(e.target.id)) {
-        const [_, instance] = e.target.id.split('-');
-        changeInstance(instance);
-      }
-    });
-  }
-
   render() {
     const { instance: { instances, instance, } } = this.props;
     const buttons = instances.map(
@@ -43,7 +33,7 @@ class TabHeader extends React.Component {
       }
     );
     return (
-      <div id='tab-header' className={style.tabHeader}>
+      <div className={style.tabHeader}>
         {buttons}
       </div>
     );
