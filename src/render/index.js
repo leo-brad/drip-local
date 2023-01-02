@@ -12,7 +12,7 @@ import focusAndBlur from '~/render/script/lib/focusAndBlur';
 
 communicate(store);
 syncContent();
-focusAndBlur();
+focusAndBlur(store);
 
 ReactDOM.render(
   <Provider store={store}>

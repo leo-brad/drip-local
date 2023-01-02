@@ -39,7 +39,7 @@ class Content extends React.Component {
       if (component[instance] === undefined) {
         const [_, i] = instance.match(/^\[(\w+)\]:(\w+)$/);
         const Pkg = pkg[i];
-        main = <Pkg data={data} emitter={emitter} />
+        main = <Pkg instance={instance} data={data} emitter={emitter} />
         component[instance] = main;
       } else {
         main = component[instance];

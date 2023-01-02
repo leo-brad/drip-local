@@ -5,9 +5,12 @@ class Emitter {
 
   send(event, data) {
     const { callbacks, } = this;
-    callbacks[event].forEach((callback) => {
-      callback(data);
-    });
+    const cbs = callbacks[event];
+    if (Array.isArray(cbs)) {
+      cbs.forEach((callback) => {
+        callback(data);
+      });
+    }
   }
 
   on(event, callback) {
