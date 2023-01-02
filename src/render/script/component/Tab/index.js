@@ -10,7 +10,7 @@ class Tab extends React.Component {
         <TabHeader />
         <div className={style.tabBanner}></div>
         <div className={style.tabMain}>
-          <Content {...this.props} />
+          <Content />
         </div>
       </div>
     );

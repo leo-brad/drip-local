@@ -14,6 +14,7 @@ class TabButton extends React.Component {
     const { changeInstance, } = this.props;
     changeInstance(instance);
     e.preventDefault();
+    e.preventPropagation();
   }
 
   componentDidMount() {
