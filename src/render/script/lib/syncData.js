@@ -17,7 +17,6 @@ function syncContent() {
     }
     if (index[instance] === undefined) {
       index[instance] = contents.length;
-      console.log(JSON.stringify(global.index));
     }
     const i = index[instance];
     if (!Array.isArray(contents[i])) {

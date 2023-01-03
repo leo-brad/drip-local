@@ -21,12 +21,11 @@ class Content extends React.Component {
   }
 
   updateView() {
-    const { instance: beforeInstance, } = this.state;
-    emitter.remove(beforeInstance, this.updateView);
-    const { instance, } = global;
-    console.log('bind');
-    emitter.on(instance, this.updateView);
     if (focus) {
+      const { instance: beforeInstance, } = this.state;
+      emitter.remove(beforeInstance, this.updateView);
+      const { instance, } = global;
+      emitter.on(instance, this.updateView);
       setTimeout(() => {
         const { index, instance, } = global;
         this.setState({
@@ -39,12 +38,12 @@ class Content extends React.Component {
 
   componentDidMount() {
     emitter.on('instance/add', this.updateView);
-    //emitter.on('instance/reduce', this.updateView);
+    emitter.on('instance/reduce', this.updateView);
   }
 
   componentWillUnmount() {
     emitter.remove('instance/add', this.updateView);
-    //emitter.remove('instance/reduce', this.updateView);
+    emitter.remove('instance/reduce', this.updateView);
   }
 
   render() {
@@ -53,10 +52,7 @@ class Content extends React.Component {
       instance,
     } = this.state;
     let content = null;
-    //console.log('index', index);
-    //console.log('instance', instance);
     const idx = index[instance];
-    //console.log(idx);
     if (typeof idx === 'number') {
       if (!Array.isArray(contents[idx])) {
         contents[idx] = [];
