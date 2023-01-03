@@ -1,53 +1,73 @@
 import React from 'react';
-import style from './index.module.css';
 import global from '~/render/script/obj/global';
 
-const { emitter, content, component, pkg, } = global;
+const {
+  emitter,
+  component,
+  pkg,
+  content: {
+    index,
+    contents,
+  },
+} = global;
+
+function getData(instance) {
+  const idx = index[instance];
+  let data;
+  if (contents[idx]) {
+    data = contents[idx];
+  } else {
+    data = [];
+  }
+  return data;
+}
 
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.updateContent = this.updateContent.bind(this);
+    this.state = {
+      instance: '',
+    };
+    this.updateView = this.updateView.bind(this);
   }
 
-  updateContent({ instance: i, }) {
-    const {
-      instance: { instance, },
-    } = this.props;
-    if (instance === i) {
-      this.forceUpdate();
+  updateView() {
+    if (focus) {
+      setTimeout(() => {
+        const { instance, } = global;
+        this.setState({
+          instance,
+        });
+      }, 0);
     }
   }
 
   componentDidMount() {
-    emitter.on('content/update', this.updateContent);
+    emitter.on('instance/add', this.updateView);
+    emitter.on('instance/reduce', this.updateView);
   }
 
   componentWillUnmount() {
-    emitter.remove('content/update', this.updateContent);
+    emitter.remove('instance/add', this.updateView);
+    emitter.remove('instance/reduce', this.updateView);
   }
 
   render() {
     const {
-      instance: { instance, },
-    } = this.props;
-    const { index, contents, } = content;
-    const idx = index[instance];
-    let main;
-    if (typeof idx === 'number' && contents[idx]) {
-      const data = contents[idx];
-      if (component[instance] === undefined) {
-        const [_, i] = instance.match(/^\[(\w+)\]:(\w+)$/);
+      instance,
+    } = this.state;
+    if (component[instance] === undefined) {
+      const regexp = /^\[(\w+)\]:(\w+)$/;
+      if (regexp.test(instance)) {
+        const data = getData(instance);
+        const [_, i] = instance.match(regexp);
         const Pkg = pkg[i];
-        main = <Pkg instance={instance} data={data} emitter={emitter} />
-        component[instance] = main;
+        component[instance] = <Pkg instance={instance} data={data} emitter={emitter} />
       } else {
-        main = component[instance];
+        component[instance] = null;
       }
-    } else {
-      main = null;
     }
-    return main;
+    return component[instance];
   }
 }
 

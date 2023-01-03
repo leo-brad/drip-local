@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './index.module.css';
-import Content from '~/render/script/container/Content';
-import TabHeader from '~/render/script/container/TabHeader';
+import Content from '~/render/script/component/Content';
+import TabHeader from '~/render/script/component/TabHeader';
 
 class Tab extends React.Component {
   render() {

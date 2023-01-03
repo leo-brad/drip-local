@@ -1,0 +1,81 @@
+import React from 'react';
+import style from './index.module.css';
+import OptimizeComponent from '~/render/script/component/OptimizeComponent';
+import TabButton from '~/render/script/component/TabButton';
+import global from '~/render/script/obj/global';
+
+const { emitter, } = global;
+
+class TabHeader extends OptimizeComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      instance: '',
+      instances: [],
+    };
+  }
+
+  componentDidMount() {
+    emitter.on('instance/add', this.updateView);
+  }
+
+  componentWillUnmount() {
+    emitter.remove('instance/add', this.updateView);
+  }
+
+  updateView() {
+    const {
+      instance: {
+        instance,
+        instances,
+      },
+    } = global;
+    this.setState({
+      instance,
+      instances,
+    });
+  }
+
+  render() {
+    const {
+      instance: {
+        instance,
+        instances,
+      },
+    } = global;
+    console.log(JSON.stringify(instances));
+    const buttons = instances.map((i, k) => {
+      console.log(i);
+      switch (k) {
+        case 0:
+          return(
+            <
+              TabButton
+              t="f" i={i} key={k} instance={instance}
+            />
+          );
+        case instances.length - 1:
+          return(
+            <
+              TabButton
+              t="l" i={i} key={k} instance={instance}
+            />
+          );
+        default:
+          return(
+            <
+              TabButton
+              i={i} key={k} instance={instance}
+            />
+          );
+      }
+    });
+    return (
+      <div className={style.tabHeader}>
+        {buttons}
+      </div>
+    );
+  }
+}
+
+export default TabHeader;
