@@ -4,10 +4,8 @@ const { emitter, } = global;
 
 function syncContent() {
   const {
-    content: {
-      index,
-      contents,
-    },
+    index,
+    contents,
   } = global;
   emitter.on('content/update', (data) => {
     const { instance, field, string, } = data;
@@ -19,22 +17,18 @@ function syncContent() {
     }
     if (index[instance] === undefined) {
       index[instance] = contents.length;
+      console.log(JSON.stringify(global.index));
     }
     const i = index[instance];
     if (!Array.isArray(contents[i])) {
       contents[i] = [];
     }
     contents[i].push({ field, string, });
-    global.content = {
-      index,
-      contents,
-    };
   });
   emitter.on('content/reset', () => {
-    global.content = {
-      index: {},
-      contents: [],
-    };
+    global.index = {};
+    global.content = [];
+    global.component = {};
   });
 }
 

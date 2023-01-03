@@ -16,7 +16,6 @@ export default function communicate(store) {
           case 'stderr': {
             let event;
             emitter.send('content/update', { instance, field, string, });
-            event = 'content/update';
             emitter.send(instance, [event]);
             emitter.send('status/update', { instance, field, });
             event = 'status/update';
@@ -44,7 +43,6 @@ export default function communicate(store) {
         break;
       }
       case 'restart': {
-        store.dispatch(restartMain());
         emitter.send('content/reset');
         break;
       }

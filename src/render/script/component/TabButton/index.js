@@ -23,13 +23,15 @@ class TabButton extends React.Component {
     if (focus) {
       const [event] = data;
       switch (event) {
-        case 'status/update':
+        case 'status/update': {
           setTimeout(() => {
+            const { i, } = this.props;
             this.setState({
               status: status[i],
             });
           }, 0);
           break;
+        }
         case 'instance/change':
         case 'instance/add/first':
           setTimeout(() => {
