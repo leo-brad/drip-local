@@ -1,12 +1,13 @@
 import React from 'react';
 import style from './index.module.css';
+import OptimizeComponent from '~/render/script/component/OptimizeComponent';
 import InstanceIcon from '~/render/script/component/InstanceIcon';
 import Loader from '~/render/script/component/Loader';
 import global from '~/render/script/obj/global';
 
 const { emitter, status, } = global;
 
-class TabButton extends React.Component {
+class TabButton extends OptimizeComponent {
   constructor(props) {
     super(props);
     this.id = new Date().getTime();
@@ -45,13 +46,13 @@ class TabButton extends React.Component {
     }
   }
 
-  componentDidMount() {
+  bind() {
     const { i, } = this.props;
     emitter.on(i, this.dealEvent);
     this.getDom().addEventListener('click', this.onClick);
   }
 
-  componentWillUnmount() {
+  remove() {
     const { i, } = this.props;
     emitter.remove(i, this.dealEvent);
     this.getDom().removeEventListener('click', this.onClick);

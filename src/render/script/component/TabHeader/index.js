@@ -1,5 +1,6 @@
 import React from 'react';
 import style from './index.module.css';
+import OptimizeComponent from '~/render/script/component/OptimizeComponent';
 import TabButton from '~/render/script/component/TabButton';
 import global from '~/render/script/obj/global';
 
@@ -8,7 +9,7 @@ const {
   instances,
 } = global;
 
-class TabHeader extends React.Component {
+class TabHeader extends OptimizeComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,12 +19,12 @@ class TabHeader extends React.Component {
     this.updateView = this.updateView.bind(this);
   }
 
-  componentDidMount() {
+  bind() {
     emitter.on('instance/add', this.updateView);
     emitter.on('instance/reduce', this.updateView);
   }
 
-  componentWillUnmount() {
+  remove() {
     emitter.remove('instance/add', this.updateView);
     emitter.remove('instance/reduce', this.updateView);
   }

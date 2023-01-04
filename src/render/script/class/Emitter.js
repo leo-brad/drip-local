@@ -23,9 +23,11 @@ class Emitter {
 
   remove(event, callback) {
     const cbs = this.callbacks[event];
-    for (let i = 0; i < cbs.length; i += 1) {
-      if (callback === cbs[i]) {
-        cbs.splice(i, 1);
+    if (Array.isArray(cbs)) {
+      for (let i = 0; i < cbs.length; i += 1) {
+        if (callback === cbs[i]) {
+          cbs.splice(i, 1);
+        }
       }
     }
   }

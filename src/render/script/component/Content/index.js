@@ -1,4 +1,5 @@
 import React from 'react';
+import OptimizeComponent from '~/render/script/component/OptimizeComponent';
 import global from '~/render/script/obj/global';
 
 const {
@@ -8,7 +9,7 @@ const {
   content,
 } = global;
 
-class Content extends React.Component {
+class Content extends OptimizeComponent {
   constructor(props) {
     super(props);
     const { instance, } = global;
@@ -52,12 +53,12 @@ class Content extends React.Component {
     }, 0);
   }
 
-  componentDidMount() {
+  bind() {
     emitter.on('instance/add', this.syncInstance);
     emitter.on('instance/change', this.syncInstance);
   }
 
-  componentWillUnmount() {
+  remove() {
     emitter.remove('instance/add', this.syncInstance);
     emitter.remove('instance/change', this.syncInstance);
   }
