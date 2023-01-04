@@ -35,6 +35,10 @@ function syncInstance() {
   emitter.on('instance/add', (instance) => {
     if (instances.length === 0) {
       global.instance = instance;
+      setTimeout(() => {
+        const event = 'instance/add/first';
+        emitter.send(instance, [event]);
+      }, 0);
     }
     global.instances.push(instance);
   });
@@ -42,8 +46,6 @@ function syncInstance() {
     for (let i = 0; i < instances.length; i += 1) {
       if (instance === instances[i]) {
         global.instances.splice(i, 1);
-        const event = 'instance/add/first';
-        emitter.send(instance, [event]);
         break;
       }
     }

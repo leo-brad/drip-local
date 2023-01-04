@@ -17,6 +17,7 @@ class TabButton extends OptimizeComponent {
     };
     this.onClick = this.onClick.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
+    this.changeInstance = this.changeInstance.bind(this);
   }
 
   dealEvent(data) {
@@ -34,7 +35,7 @@ class TabButton extends OptimizeComponent {
           break;
         }
         case 'instance/change':
-        case 'instance/add/first':
+        case 'instance/add/first': {
           setTimeout(() => {
             const { instance, } = global;
             this.setState({
@@ -42,28 +43,38 @@ class TabButton extends OptimizeComponent {
             });
           }, 0);
           break;
+        }
       }
     }
   }
 
+  changeInstance(instance) {
+    setTimeout(() => {
+      this.setState({
+        instance,
+      });
+    });
+  }
+
   bind() {
     const { i, } = this.props;
+    emitter.on('instance/change', this.changeInstance);
     emitter.on(i, this.dealEvent);
     this.getDom().addEventListener('click', this.onClick);
   }
 
   remove() {
     const { i, } = this.props;
+    emitter.remove('instance/change', this.changeInstance());
     emitter.remove(i, this.dealEvent);
     this.getDom().removeEventListener('click', this.onClick);
   }
 
   onClick(e) {
-    const { instance, } = global;
-    const event = 'instance/update';
-    emitter.send(instance, [event]);
+    const { i, } = this.props;
+    emitter.send('instance/change', i);
     e.preventDefault();
-    e.preventPropagation();
+    e.stopPropagation();
   }
 
   getDom() {
@@ -77,7 +88,7 @@ class TabButton extends OptimizeComponent {
   render() {
     const { id, } = this;
     const { t, i, } = this.props;
-    const { instance, } = global;
+    const { instance, } = this.state;
     const active = instance === i;
     let cns = [style.tabButton, active ? style.active : null];
     switch (t) {

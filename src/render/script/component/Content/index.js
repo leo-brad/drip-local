@@ -16,6 +16,7 @@ class Content extends OptimizeComponent {
     this.state = {
       instance,
     };
+    this.instance = instance;
     this.updateView = this.updateView.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
     this.syncInstance = this.syncInstance.bind(this);
@@ -28,6 +29,7 @@ class Content extends OptimizeComponent {
         this.setState({
           instance,
         });
+        this.sendMountAndUnmount();
       }, 0);
     }
   }
@@ -39,6 +41,16 @@ class Content extends OptimizeComponent {
         this.updateView();
         break;
     }
+  }
+
+  sendMountAndUnmount() {
+    const { instance: beforeInstance, } = this;
+    let event = 'unmount';
+    emitter.send(beforeInstance, [event]);
+    const { instance, } = global;
+    event = 'mount';
+    emitter.send(instance, [event]);
+    this.instance = instance;
   }
 
   syncInstance() {
@@ -55,35 +67,35 @@ class Content extends OptimizeComponent {
 
   bind() {
     emitter.on('instance/add', this.syncInstance);
-    emitter.on('instance/change', this.syncInstance);
+    emitter.on('instance/change', this.updateView);
   }
 
   remove() {
     emitter.remove('instance/add', this.syncInstance);
-    emitter.remove('instance/change', this.syncInstance);
+    emitter.remove('instance/change', this.updateView);
   }
 
   render() {
     const {
       instance,
     } = this.state;
-    let view = null;
     const {
       content,
     } = global;
     const data = content[instance];
     if (Array.isArray(data) && data.length > 0) {
-      const regexp = /^\[(\w+)\]:(\w+)$/;
-      if (regexp.test(instance)) {
-        const [_, i] = instance.match(regexp);
-        const Pkg = pkg[i];
-        if (component[instance] === undefined) {
-          component[instance] = <Pkg instance={instance} data={data} emitter={emitter} />
+      if (component[instance] === undefined) {
+        const regexp = /^\[(\w+)\]:(\w+)$/;
+        if (regexp.test(instance)) {
+          const [_, i] = instance.match(regexp);
+          const Pkg = pkg[i];
+          component[instance] = <Pkg instance={this.state.instance} data={data} emitter={emitter} />
         }
-        view = component[instance];
       }
+    } else {
+      component[instance] = null;
     }
-    return view;
+    return component[instance];
   }
 }
 
