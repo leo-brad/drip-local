@@ -8,7 +8,7 @@ class Tab extends React.Component {
     return (
       <div className={style.tab}>
         <TabHeader />
-        <div className={style.tabBanner}></div>
+        <div className={style.tabBanner} />
         <div className={style.tabMain}>
           <Content />
         </div>

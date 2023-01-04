@@ -5,8 +5,7 @@ const emitter = new Emitter();
 const global = {
   emitter,
   pkg: {},
-  index: {},
-  contents: [],
+  content: {},
   component: {},
   focus: true,
   instance: '',

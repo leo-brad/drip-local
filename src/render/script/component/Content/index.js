@@ -5,59 +5,73 @@ const {
   emitter,
   component,
   pkg,
-  contents,
+  content,
 } = global;
 
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    const { instance, index, } = global;
+    const { instance, } = global;
     this.state = {
-      index,
       instance,
     };
-    emitter.on(instance, this.updateView);
     this.updateView = this.updateView.bind(this);
+    this.dealEvent = this.dealEvent.bind(this);
+    this.syncInstance = this.syncInstance.bind(this);
   }
 
   updateView() {
     if (focus) {
-      const { instance: beforeInstance, } = this.state;
-      emitter.remove(beforeInstance, this.updateView);
-      const { instance, } = global;
-      emitter.on(instance, this.updateView);
       setTimeout(() => {
-        const { index, instance, } = global;
+        const { instance, } = global;
         this.setState({
-          index,
           instance,
         });
       }, 0);
     }
   }
 
+  dealEvent(data) {
+    const [event] = data;
+    switch (event) {
+      case 'status/update':
+        this.updateView();
+        break;
+    }
+  }
+
+  syncInstance() {
+    setTimeout(() => {
+      const { instance: beforeInstance, } = this;
+      if (beforeInstance) {
+        emitter.remove(beforeInstance, this.dealEvent);
+      }
+      const { instance, } = global;
+      emitter.on(instance, this.dealEvent);
+      this.instance = instance;
+    }, 0);
+  }
+
   componentDidMount() {
-    emitter.on('instance/add', this.updateView);
-    emitter.on('instance/reduce', this.updateView);
+    emitter.on('instance/add', this.syncInstance);
+    emitter.on('instance/change', this.syncInstance);
   }
 
   componentWillUnmount() {
-    emitter.remove('instance/add', this.updateView);
-    emitter.remove('instance/reduce', this.updateView);
+    emitter.remove('instance/add', this.syncInstance);
+    emitter.remove('instance/change', this.syncInstance);
   }
 
   render() {
     const {
-      index,
       instance,
     } = this.state;
-    let content = null;
-    const idx = index[instance];
-    if (typeof idx === 'number') {
-      if (!Array.isArray(contents[idx])) {
-        contents[idx] = [];
-      }
-      const data = contents[idx];
+    let view = null;
+    const {
+      content,
+    } = global;
+    const data = content[instance];
+    if (Array.isArray(data) && data.length > 0) {
       const regexp = /^\[(\w+)\]:(\w+)$/;
       if (regexp.test(instance)) {
         const [_, i] = instance.match(regexp);
@@ -65,10 +79,10 @@ class Content extends React.Component {
         if (component[instance] === undefined) {
           component[instance] = <Pkg instance={instance} data={data} emitter={emitter} />
         }
-        content = component[instance];
+        view = component[instance];
       }
     }
-    return content;
+    return view;
   }
 }
 

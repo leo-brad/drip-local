@@ -4,8 +4,7 @@ const { emitter, } = global;
 
 function syncContent() {
   const {
-    index,
-    contents,
+    content,
   } = global;
   emitter.on('content/update', (data) => {
     const { instance, field, string, } = data;
@@ -15,18 +14,15 @@ function syncContent() {
         { body:  'instance ' + instance +  ' happen a wrong.', },
       );
     }
-    if (index[instance] === undefined) {
-      index[instance] = contents.length;
+    let i = content[instance];
+    if (!Array.isArray(i)) {
+      content[instance] = [];
     }
-    const i = index[instance];
-    if (!Array.isArray(contents[i])) {
-      contents[i] = [];
-    }
-    contents[i].push({ field, string, });
+    i = content[instance];
+    i.push({ field, string, });
   });
   emitter.on('content/reset', () => {
-    global.index = {};
-    global.content = [];
+    global.content = {};
     global.component = {};
   });
 }
