@@ -15,7 +15,8 @@ const {
 class TabButton extends OptimizeComponent {
   constructor(props) {
     super(props);
-    this.id = new Date().getTime();
+    const { k, } = this.props;
+    this.id = new Date().getTime() + k.toString();
     this.state = {
       status: '',
       instance: '',

@@ -11,7 +11,7 @@ class OptimizeComponent extends React.Component {
   componentDidMount() {
     const { ownDidMount, } = this;
     if (typeof ownDidMount === 'function') {
-      ownDidMount();
+      this.ownDidMount();
     }
     this.bind();
     emitter.on('window/focus', this.bind);
@@ -21,7 +21,7 @@ class OptimizeComponent extends React.Component {
   componentWillUnmount() {
     const { ownWillUnmount, } = this;
     if (typeof ownWillUnmount === 'function') {
-      ownWillUnmount();
+      this.ownWillUnmount();
     }
     this.remove();
     emitter.on('window/focus', this.bind);

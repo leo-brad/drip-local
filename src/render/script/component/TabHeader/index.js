@@ -54,11 +54,11 @@ class TabHeader extends OptimizeComponent {
     const buttons = instances.map((i, k) => {
       switch (k) {
         case 0:
-          return <TabButton t="f" i={i} key={k} />
+          return <TabButton t="f" i={i} key={k} k={k} />
         case instances.length - 1:
-          return <TabButton t="l" i={i} key={k} />;
+          return <TabButton t="l" i={i} key={k} k={k} />;
         default:
-          return <TabButton i={i} key={k} />
+          return <TabButton i={i} key={k} k={k} />
       }
     });
     return (
