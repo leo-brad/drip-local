@@ -3,7 +3,9 @@ import OptimizeComponent from '~/render/script/component/OptimizeComponent';
 import global from '~/render/script/obj/global';
 
 const {
-  emitter,
+  share: {
+    emitter,
+  },
   component,
   pkg,
   content,
@@ -23,6 +25,11 @@ class Content extends OptimizeComponent {
   }
 
   updateView() {
+    const {
+      share: {
+        focus,
+      },
+    } = global;
     if (focus) {
       setTimeout(() => {
         const { instance, } = global;
@@ -45,8 +52,10 @@ class Content extends OptimizeComponent {
 
   sendMountAndUnmount() {
     const { instance: beforeInstance, } = this;
-    let event = 'unmount';
-    emitter.send(beforeInstance, [event]);
+    if (beforeInstance) {
+      let event = 'unmount';
+      emitter.send(beforeInstance, [event]);
+    }
     const { instance, } = global;
     event = 'mount';
     emitter.send(instance, [event]);
@@ -89,7 +98,8 @@ class Content extends OptimizeComponent {
         if (regexp.test(instance)) {
           const [_, i] = instance.match(regexp);
           const Pkg = pkg[i];
-          component[instance] = <Pkg instance={this.state.instance} data={data} emitter={emitter} />
+          const { share, } = global;
+          component[instance] = <Pkg instance={instance} data={data} share={share} />
         }
       }
     } else {

@@ -5,7 +5,9 @@ import TabButton from '~/render/script/component/TabButton';
 import global from '~/render/script/obj/global';
 
 const {
-  emitter,
+  share: {
+    emitter,
+  },
   instances,
 } = global;
 
@@ -30,7 +32,11 @@ class TabHeader extends OptimizeComponent {
   }
 
   updateView(data) {
-    const { focus, } = global;
+    const {
+      share: {
+        focus,
+      },
+    } = global;
     if (focus) {
       setTimeout(() => {
         const { instances, } = global;

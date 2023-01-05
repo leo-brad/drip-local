@@ -1,6 +1,10 @@
 import global from '~/render/script/obj/global';
 
-const { emitter, } = global;
+const {
+  share: {
+    emitter,
+  },
+} = global;
 
 function syncContent() {
   const {

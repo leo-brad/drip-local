@@ -2,7 +2,11 @@ import React from 'react';
 import addPkgs from '~/render/script/lib/addPkgs';
 import global from '~/render/script/obj/global';
 
-const { emitter, } = global;
+const {
+  share: {
+    emitter,
+  },
+} = global;
 
 export default function communicate(store) {
   const { ipc, } = window;

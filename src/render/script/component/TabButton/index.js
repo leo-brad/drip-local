@@ -5,7 +5,12 @@ import InstanceIcon from '~/render/script/component/InstanceIcon';
 import Loader from '~/render/script/component/Loader';
 import global from '~/render/script/obj/global';
 
-const { emitter, status, } = global;
+const {
+  share: {
+    emitter,
+  },
+   status,
+} = global;
 
 class TabButton extends OptimizeComponent {
   constructor(props) {
@@ -21,7 +26,11 @@ class TabButton extends OptimizeComponent {
   }
 
   dealEvent(data) {
-    const { focus, } = global;
+    const {
+      share: {
+        focus,
+      },
+    } = global;
     if (focus) {
       const [event] = data;
       switch (event) {

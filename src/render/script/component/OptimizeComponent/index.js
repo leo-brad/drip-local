@@ -2,7 +2,9 @@ import React from 'react';
 import global from '~/render/script/obj/global';
 
 const {
-  emitter,
+  share: {
+    emitter,
+  },
 } = global;
 
 class OptimizeComponent extends React.Component {
