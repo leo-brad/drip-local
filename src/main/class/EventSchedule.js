@@ -86,13 +86,13 @@ class EventSchedule {
         this.fillProcPool(location);
       }
     });
-    emitter.on('proc', async ({ field, instance, data='', id, }) => {
+    emitter.on('proc', async ({ field, instance, data='', }) => {
       const event = 'proc';
       switch (field) {
         case 'end':
           break;
       }
-      this.writeData([event, instance, field, data, id,]);
+      this.writeData([event, instance, field, data,]);
     });
   }
 }
