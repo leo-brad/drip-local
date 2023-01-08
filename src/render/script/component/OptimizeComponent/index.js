@@ -24,8 +24,8 @@ class OptimizeComponent extends React.Component {
       this.ownWillUnmount();
     }
     this.remove();
-    emitter.on('window/focus', this.bind);
-    emitter.on('window/blur', this.remove);
+    emitter.remove('window/focus', this.bind);
+    emitter.remove('window/blur', this.remove);
   }
 }
 

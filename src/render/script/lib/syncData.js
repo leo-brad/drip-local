@@ -7,10 +7,10 @@ const {
 } = global;
 
 function syncContent() {
-  const {
-    content,
-  } = global;
   emitter.on('content/update', (data) => {
+    const {
+      content,
+    } = global;
     const { instance, field, string, } = data;
     if (field === 'stderr') {
       new Notification(
@@ -25,18 +25,13 @@ function syncContent() {
     i = content[instance];
     i.push({ field, string, });
   });
-  emitter.on('content/reset', () => {
-    global.content = {};
-    global.component = {};
-  });
 }
 
 function syncInstance() {
-  const {
-    instance,
-    instances,
-  } = global;
   emitter.on('instance/add', (instance) => {
+    const {
+      instances,
+    } = global;
     if (instances.length === 0) {
       global.instance = instance;
       setTimeout(() => {
@@ -72,8 +67,35 @@ function syncStatus() {
   });
 }
 
+function clearComponent() {
+  const {
+    component,
+  } = global;
+  Object.keys(component).forEach((k) => {
+    let event = 'unmount';
+    emitter.send(k, [event]);
+  });
+  global.component = {};
+}
+
+function syncMain() {
+  emitter.on('main/reset', () => {
+    global.pkg = {};
+    clearComponent();
+    global.content = {};
+    global.instance = '';
+    global.instances = [];
+    global.status = {};
+    global.share = {
+      emitter,
+      focus: true,
+    };
+  });
+}
+
 export default function syncData() {
   syncContent();
   syncInstance();
   syncStatus();
+  syncMain();
 }

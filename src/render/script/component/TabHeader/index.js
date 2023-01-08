@@ -22,11 +22,13 @@ class TabHeader extends OptimizeComponent {
   }
 
   bind() {
+    emitter.on('main/reset', this.updateView);
     emitter.on('instance/add', this.updateView);
     emitter.on('instance/reduce', this.updateView);
   }
 
   remove() {
+    emitter.remove('main/reset', this.updateView);
     emitter.remove('instance/add', this.updateView);
     emitter.remove('instance/reduce', this.updateView);
   }

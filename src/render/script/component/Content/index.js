@@ -33,6 +33,8 @@ class Content extends OptimizeComponent {
     if (focus) {
       setTimeout(() => {
         const { instance, } = global;
+        console.log(global);
+        console.log('instance', instance);
         this.setState({
           instance,
         });
@@ -77,11 +79,13 @@ class Content extends OptimizeComponent {
   bind() {
     emitter.on('instance/add', this.syncInstance);
     emitter.on('instance/change', this.updateView);
+    emitter.on('main/reset', this.updateView);
   }
 
   remove() {
     emitter.remove('instance/add', this.syncInstance);
     emitter.remove('instance/change', this.updateView);
+    emitter.remove('main/reset', this.updateView);
   }
 
   render() {
@@ -93,7 +97,7 @@ class Content extends OptimizeComponent {
     } = global;
     const data = content[instance];
     if (Array.isArray(data) && data.length > 0) {
-      if (component[instance] === undefined) {
+      if (!component[instance]) {
         const regexp = /^\[(\w+)\]:(\w+)$/;
         if (regexp.test(instance)) {
           const [_, i] = instance.match(regexp);

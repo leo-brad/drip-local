@@ -75,7 +75,7 @@ class TabButton extends OptimizeComponent {
 
   remove() {
     const { i, } = this.props;
-    emitter.remove('instance/change', this.changeInstance());
+    emitter.remove('instance/change', this.changeInstance);
     emitter.remove(i, this.dealEvent);
     this.getDom().removeEventListener('click', this.onClick);
   }
