@@ -33,8 +33,6 @@ class Content extends OptimizeComponent {
     if (focus) {
       setTimeout(() => {
         const { instance, } = global;
-        console.log(global);
-        console.log('instance', instance);
         this.setState({
           instance,
         });
