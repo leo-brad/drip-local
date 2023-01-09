@@ -3,7 +3,12 @@ import React from 'react';
 import { HashRouter, Routes, Route, } from 'react-router-dom';
 import '~/render/style/index.css';
 import Home from '~/render/script/page/Home';
-import main from '~/render/script/lib/main';
+import communicate from '~/render/script/lib/communicate';
+import syncData from '~/render/script/lib/syncData';
+import focusAndBlur from '~/render/script/lib/focusAndBlur';
+
+syncData();
+focusAndBlur();
 
 ReactDOM.render(
   <HashRouter>
@@ -14,4 +19,4 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-main();
+communicate();

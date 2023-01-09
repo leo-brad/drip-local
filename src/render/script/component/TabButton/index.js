@@ -36,22 +36,18 @@ class TabButton extends OptimizeComponent {
       const [event] = data;
       switch (event) {
         case 'status/update': {
-          setTimeout(() => {
-            const { i, } = this.props;
-            this.setState({
-              status: status[i],
-            });
-          }, 0);
+          const { i, } = this.props;
+          this.setState({
+            status: status[i],
+          });
           break;
         }
         case 'instance/change':
         case 'instance/add/first': {
-          setTimeout(() => {
-            const { instance, } = global;
-            this.setState({
-              instance,
-            });
-          }, 0);
+          const { instance, } = global;
+          this.setState({
+            instance,
+          });
           break;
         }
       }
@@ -59,10 +55,8 @@ class TabButton extends OptimizeComponent {
   }
 
   changeInstance(instance) {
-    setTimeout(() => {
-      this.setState({
-        instance,
-      });
+    this.setState({
+      instance,
     });
   }
 

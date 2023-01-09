@@ -40,12 +40,10 @@ class TabHeader extends OptimizeComponent {
       },
     } = global;
     if (focus) {
-      setTimeout(() => {
-        const { instances, } = global;
-        this.setState({
-          instances,
-        });
-      }, 0);
+      const { instances, } = global;
+      this.setState({
+        instances,
+      });
     }
   }
 

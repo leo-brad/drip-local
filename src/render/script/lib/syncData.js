@@ -84,6 +84,7 @@ function syncMain() {
       emitter,
       focus: true,
     };
+    //console.log('RESET');
   });
 }
 
