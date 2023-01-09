@@ -10,8 +10,11 @@ contextBridge.exposeInMainWorld('ipc', {
 });
 
 setTimeout(() => {
-  const argv = fs.readFileSync(path.join(__dirname, 'argv'));
-  const [configString, projectPath] = JSON.parse(argv);
+  const message = JSON.parse(fs.readFileSync(path.join(__dirname, 'message')));
+  const {
+    argv,
+  } = message;
+  const [configString, projectPath] = argv;
   const config = JSON.parse(configString);
   configExec(config, projectPath, ipc);
 }, 10);

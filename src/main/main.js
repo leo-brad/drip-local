@@ -10,11 +10,13 @@ function createWindow() {
       preload: path.resolve(__dirname, 'preload.js'),
     },
   });
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
   win.loadFile('./index.html');
-  const [_1, _2, configString, projectPath] = process.argv;
-  const argv = JSON.stringify([configString, projectPath]);
-  fs.writeFileSync(path.join(__dirname, 'argv'), argv);
+  const [_1, _2, ...argv] = process.argv;
+  const message = {
+    argv,
+  };
+  fs.writeFileSync(path.join(__dirname, 'message'), JSON.stringify(message));
 }
 
 app.whenReady().then(() => {
