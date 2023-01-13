@@ -30,7 +30,7 @@ class EventSchedule {
 
   writeData(data) {
     const { ipc, } = this;
-    ipc.send('drip', data);
+    ipc.send('drip/data', data);
   }
 
   sendPackages() {

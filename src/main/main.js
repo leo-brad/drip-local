@@ -2,6 +2,15 @@ import fs from 'fs';
 import { app, BrowserWindow, } from 'electron';
 import path from 'path';
 
+function dealMessage() {
+  const [_1, _2, ...argv] = process.argv;
+  const message = { argv, };
+  fs.writeFileSync(
+    path.join(__dirname, 'message'),
+    JSON.stringify(message)
+  );
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 900,
@@ -12,11 +21,8 @@ function createWindow() {
   });
   win.webContents.openDevTools();
   win.loadFile('./index.html');
-  const [_1, _2, ...argv] = process.argv;
-  const message = {
-    argv,
-  };
-  fs.writeFileSync(path.join(__dirname, 'message'), JSON.stringify(message));
+
+  dealMessage();
 }
 
 app.whenReady().then(() => {

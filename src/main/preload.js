@@ -1,20 +1,28 @@
 import path from 'path';
 import fs from 'fs';
 import { contextBridge, } from 'electron';
-import configExec from '~/main/lib/configExec';
 import Ipc from '~/main/class/Ipc';
+import configExec from '~/main/lib/configExec';
 
 const ipc = new Ipc();
-contextBridge.exposeInMainWorld('ipc', {
-  on: ipc.on.bind(ipc),
-});
+contextBridge.exposeInMainWorld(
+  'ipc', {
+    on: ipc.on.bind(ipc),
+  }
+);
 
 setTimeout(() => {
-  const message = JSON.parse(fs.readFileSync(path.join(__dirname, 'message')));
-  const {
-    argv,
-  } = message;
-  const [configString, projectPath] = argv;
-  const config = JSON.parse(configString);
-  configExec(config, projectPath, ipc);
+  try {
+    const message = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'message'))
+    );
+    const { argv, } = message;
+    const [configString, projectPath] = argv;
+
+    const config = JSON.parse(configString);
+    configExec(config, projectPath, ipc);
+    throw Error('example');
+  } catch (e) {
+    ipc.send('drip/error', e);
+  }
 }, 10);

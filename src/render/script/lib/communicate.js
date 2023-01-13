@@ -10,7 +10,7 @@ const {
 
 export default function communicate(store) {
   const { ipc, } = window;
-  ipc.on('drip', (data) => {
+  ipc.on('drip/data', (data) => {
     const [event,] = data;
     switch (event) {
       case 'proc': {
@@ -51,6 +51,9 @@ export default function communicate(store) {
         break;
       }
     }
+  });
+  ipc.on('drip/error', (e) => {
+    emitter.send('error');
   });
 }
 

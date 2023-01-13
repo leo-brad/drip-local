@@ -84,7 +84,13 @@ function syncMain() {
       emitter,
       focus: true,
     };
-    //console.log('RESET');
+  });
+}
+
+function syncError() {
+  emitter.on('error', (e) => {
+    global.error = e;
+    location.hash = '/error';
   });
 }
 
@@ -93,4 +99,5 @@ export default function syncData() {
   syncInstance();
   syncStatus();
   syncMain();
+  syncError();
 }
