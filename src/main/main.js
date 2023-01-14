@@ -19,7 +19,7 @@ function createWindow() {
       preload: path.resolve(__dirname, 'preload.js'),
     },
   });
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
   win.loadFile('./index.html');
 
   dealMessage();
