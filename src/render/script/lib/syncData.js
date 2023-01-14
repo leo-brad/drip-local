@@ -87,17 +87,9 @@ function syncMain() {
   });
 }
 
-function syncError() {
-  emitter.on('error', (e) => {
-    global.error = e;
-    location.hash = '/error';
-  });
-}
-
 export default function syncData() {
   syncContent();
   syncInstance();
   syncStatus();
   syncMain();
-  syncError();
 }

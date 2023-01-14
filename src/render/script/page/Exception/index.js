@@ -12,18 +12,23 @@ class Exception extends React.Component {
       error: null,
     };
   }
+
   componentDidMount() {
     const { error, } = global;
     this.setState({
-      global,
+      error: error,
     });
   }
 
   render() {
     const { error, } = this.state;
-    return (
-      <div>{error}</div>
-    );
+    let e;
+    if (error) {
+      e = <div>{error.toString()}</div>;
+    } else {
+      e = <div></div>
+    }
+    return e;
   }
 }
 

@@ -3,6 +3,7 @@ import addPkgs from '~/render/script/lib/addPkgs';
 import global from '~/render/script/obj/global';
 
 const {
+  location,
   share: {
     emitter,
   },
@@ -53,7 +54,8 @@ export default function communicate(store) {
     }
   });
   ipc.on('drip/error', (e) => {
-    emitter.send('error');
+    global.error = e;
+    location.to('/error');
   });
 }
 
