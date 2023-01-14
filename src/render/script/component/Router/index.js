@@ -41,7 +41,6 @@ class Router extends React.Component {
 
   render() {
     const { location, } = this.state;
-    console.log(location);
     return this.getPage(location);
   }
 }
