@@ -21,7 +21,6 @@ setTimeout(() => {
 
     const config = JSON.parse(configString);
     configExec(config, projectPath, ipc);
-    throw Error('example');
   } catch (e) {
     ipc.send('drip/error', e);
   }
