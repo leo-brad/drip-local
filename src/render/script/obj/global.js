@@ -7,6 +7,7 @@ const location = new Location();
 const global = {
   location,
   error: null,
+  router: null,
   pkg: {},
   content: {},
   component: {},
