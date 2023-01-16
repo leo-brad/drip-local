@@ -1,5 +1,5 @@
 import React from 'react';
-import OptimizeComponent from '~/render/script/component/OptimizeComponent';
+import OfflineComponent from '~/render/script/component/OfflineComponent';
 import global from '~/render/script/obj/global';
 
 const {
@@ -11,7 +11,7 @@ const {
   content,
 } = global;
 
-class Content extends OptimizeComponent {
+class Content extends OfflineComponent {
   constructor(props) {
     super(props);
     const { instance, } = global;

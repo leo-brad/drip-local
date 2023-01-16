@@ -7,7 +7,7 @@ const {
   },
 } = global;
 
-class OptimizeComponent extends React.Component {
+class OfflineComponent extends React.Component {
   componentDidMount() {
     const { ownDidMount, } = this;
     if (typeof ownDidMount === 'function') {
@@ -29,4 +29,4 @@ class OptimizeComponent extends React.Component {
   }
 }
 
-export default OptimizeComponent;
+export default OfflineComponent;

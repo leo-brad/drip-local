@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.module.css';
-import OptimizeComponent from '~/render/script/component/OptimizeComponent';
+import OfflineComponent from '~/render/script/component/OfflineComponent';
 import InstanceIcon from '~/render/script/component/InstanceIcon';
 import Loader from '~/render/script/component/Loader';
 import global from '~/render/script/obj/global';
@@ -12,7 +12,7 @@ const {
    status,
 } = global;
 
-class TabButton extends OptimizeComponent {
+class TabButton extends OfflineComponent {
   constructor(props) {
     super(props);
     const { k, } = this.props;
