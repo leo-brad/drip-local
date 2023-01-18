@@ -56,8 +56,7 @@ export default function communicate() {
   });
   ipc.on('drip/error', (e) => {
     global.error = e;
-    router.addRoute('/error', require('~/render/script/page/Exception'));
-    location.to('/error');
+    emitter.send('error');
   });
 }
 
