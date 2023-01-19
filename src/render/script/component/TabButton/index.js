@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal, } from 'react-dom';
 import style from './index.module.css';
 import OfflineComponent from '~/render/script/component/OfflineComponent';
 import InstanceIcon from '~/render/script/component/InstanceIcon';
@@ -9,14 +10,12 @@ const {
   share: {
     emitter,
   },
-   status,
+  status,
 } = global;
 
 class TabButton extends OfflineComponent {
   constructor(props) {
     super(props);
-    const { k, } = this.props;
-    this.id = new Date().getTime() + k.toString();
     this.state = {
       status: '',
       instance: '',
@@ -24,6 +23,12 @@ class TabButton extends OfflineComponent {
     this.onClick = this.onClick.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
     this.changeInstance = this.changeInstance.bind(this);
+    if (!window.dynamic) {
+      window.dynamic = 1;
+    } else {
+      window.dynamic = 0;
+      this.componentDidMount();
+    }
   }
 
   dealEvent(data) {
@@ -96,17 +101,16 @@ class TabButton extends OfflineComponent {
   }
 
   render() {
-    const { id, } = this;
-    const { t, i, } = this.props;
+    const { t, i, id, } = this.props;
     const { instance, } = this.state;
     const active = instance === i;
     let cns = [style.tabButton, active ? style.active : null];
     switch (t) {
       case 'f':
-        cns.push(style.tabButtonFirst);
+        cns.push(style.firstTabButton);
         break;
       case 'l':
-        cns.push(style.tabButtonLast);
+        cns.push(style.lastTabButton);
         break;
       default:
         break;

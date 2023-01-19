@@ -8,6 +8,7 @@ const global = {
   location,
   error: null,
   router: null,
+  template: null,
   pkg: {},
   content: {},
   component: {},
