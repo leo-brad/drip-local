@@ -16,10 +16,14 @@ const {
 class TabButton extends OfflineComponent {
   constructor(props) {
     super(props);
+    const {
+      k,
+    } = this.props;
     this.state = {
       status: '',
       instance: '',
     };
+    this.id = new Date().getTime().toString() + k;
     this.onClick = this.onClick.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
     this.changeInstance = this.changeInstance.bind(this);
@@ -94,14 +98,15 @@ class TabButton extends OfflineComponent {
 
   getDom() {
     const { dom, id, } = this;
-    if (dom === undefined) {
+    if (!dom) {
       this.dom = document.getElementById(id);
     }
     return this.dom;
   }
 
   render() {
-    const { t, i, id, } = this.props;
+    const { id, } = this;
+    const { t, i, } = this.props;
     const { instance, } = this.state;
     const active = instance === i;
     let cns = [style.tabButton, active ? style.active : null];

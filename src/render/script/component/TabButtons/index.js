@@ -21,10 +21,10 @@ class TabButtons extends OfflineComponent {
     this.widths = {};
     this.doms = {};
     this.component = {};
+    this.hasData = false;
+    this.location = 0;
     this.id = new Date().getTime().toString();
     this.updateView = this.updateView.bind(this);
-    this.getDom = this.getDom.bind(this);
-    this.getComponent = this.getComponent.bind(this);
   }
 
   ownDidMount() {
@@ -60,30 +60,38 @@ class TabButtons extends OfflineComponent {
 
   setData(data) {
     if (data.length !== 0) {
-      this.data = data;
-      this.setLocation(0);
+      const { hasData, } = this;
+      if (!hasData) {
+        this.data = data;
+        this.hasData = true;
+      }
     }
+    const { location, } = this;
+    this.setLocation(location);
   }
 
   setLocation(location) {
+    const { ul, } = this;
+    for (const child of ul.children) {
+      child.remove();
+    }
     this.location = location;
     this.count = 0;
     this.addItem(2);
     this.count += 1;
-    const { ul, } = this;
     ul.style.visibility = 'hidden';
     while (true) {
       const { count, } = this;
       this.r = count % 2;
       const { r, } = this;
+      if (count > this.data.length - 1) {
+        break;
+      }
       this.addItem(r);
-      this.count += 1;
       if (this.detectEdge()) {
         break;
       }
-      if (count > 1) {
-        break;
-      }
+      this.count += 1;
     }
     ul.style.visibility = 'visible';
   }
@@ -96,21 +104,22 @@ class TabButtons extends OfflineComponent {
     return doms[key];
   }
 
-  getComponent(key) {
-    const { component, } = this;
-    return component[key];
-  }
-
   getWidth(key) {
     const { widths, } = this;
     if (widths[key] === undefined) {
-      widths[key] = this.getDom(key).clientWidth;
+      const dom = this.getDom(key);
+      if (dom) {
+        widths[key] = dom.clientWidth;
+      }
     }
     return widths[key];
   }
 
   getLeft(key) {
-    return this.getDom(key).offsetLeft;
+    const dom = this.getDom(key);
+    if (dom) {
+      return dom.offsetLeft;
+    }
   }
 
   getRight(key) {
@@ -130,18 +139,23 @@ class TabButtons extends OfflineComponent {
     if (idx !== undefined && isUpdate) {
       switch (r) {
         case 1: {
-          const right = this.getRight(this.getKey(idx));
-          if (right > this.width) {
-            ans = true;
-            li.remove();
+          const { right, } = this;
+          if (right !== undefined) {
+            const right = this.getRight(this.getKey(idx));
+            if (right > this.width) {
+              ans = true;
+              li.remove();
+            }
           }
           break;
         }
         case 0: {
-          const left = this.getLeft(this.getKey(idx));
-          if (left < 0) {
-            ans = true;
-            li.remove();
+          if (left !== undefined) {
+            const left = this.getLeft(this.getKey(idx));
+            if (left < 0) {
+              ans = true;
+              li.remove();
+            }
           }
           break;
         }
@@ -170,12 +184,13 @@ class TabButtons extends OfflineComponent {
   }
 
   addItem(t) {
-    const { ul, template, id, } = this;
+    const { ul, id, } = this;
     const idx = this.getIndex();
     const d = this.data[idx];
     if (d !== undefined) {
       this.idx = idx;
       const id = this.getKey(idx);
+      const component = <TabButton i={d} k={idx}>{d}</TabButton>;
       const node = renderToNode(<li id={id} />);
       switch (t) {
         case 2: {
@@ -197,7 +212,7 @@ class TabButtons extends OfflineComponent {
       const { li, } = this;
       if (li) {
         const root = ReactDOM.createRoot(li);
-        root.render(<TabButton i={d} key={idx} k={idx}>{d}</TabButton>);
+        root.render(component);
       }
       this.isUpdate = true;
     } else {
