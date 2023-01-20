@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import style from './index.module.css';
-import OfflineComponent from '~/render/script/component/OfflineComponent';
+import PointLineOffline from '~/render/script/component/PointLineOffline';
 import TabButton from '~/render/script/component/TabButton';
 import renderToNode from '~/render/script/lib/renderToNode';
 import global from '~/render/script/obj/global';
@@ -13,17 +13,11 @@ const {
   instances,
 } = global;
 
-class TabButtons extends OfflineComponent {
+class TabButtons extends PointLineOffline {
   constructor(props) {
     super(props);
     this.data = [];
-    this.isUpdate = false;
-    this.widths = {};
-    this.doms = {};
-    this.component = {};
     this.hasData = false;
-    this.location = 0;
-    this.id = new Date().getTime().toString();
     this.updateView = this.updateView.bind(this);
   }
 
@@ -94,93 +88,6 @@ class TabButtons extends OfflineComponent {
       this.count += 1;
     }
     ul.style.visibility = 'visible';
-  }
-
-  getDom(key) {
-    const { doms, } = this;
-    if (doms[key] === undefined) {
-      doms[key] = document.getElementById(key);
-    }
-    return doms[key];
-  }
-
-  getWidth(key) {
-    const { widths, } = this;
-    if (widths[key] === undefined) {
-      const dom = this.getDom(key);
-      if (dom) {
-        widths[key] = dom.clientWidth;
-      }
-    }
-    return widths[key];
-  }
-
-  getLeft(key) {
-    const dom = this.getDom(key);
-    if (dom) {
-      return dom.offsetLeft;
-    }
-  }
-
-  getRight(key) {
-    const width = this.getWidth(key);
-    const left = this.getLeft(key);
-    return left + width;
-  }
-
-  getKey(key) {
-    const { id, } = this;
-    return id + key;
-  }
-
-  detectEdge() {
-    let ans = false;;
-    const { r, idx, li, isUpdate, } = this;
-    if (idx !== undefined && isUpdate) {
-      switch (r) {
-        case 1: {
-          const { right, } = this;
-          if (right !== undefined) {
-            const right = this.getRight(this.getKey(idx));
-            if (right > this.width) {
-              ans = true;
-              li.remove();
-            }
-          }
-          break;
-        }
-        case 0: {
-          if (left !== undefined) {
-            const left = this.getLeft(this.getKey(idx));
-            if (left < 0) {
-              ans = true;
-              li.remove();
-            }
-          }
-          break;
-        }
-      }
-    }
-    return ans;
-  }
-
-  getIndex() {
-    const { count, r, location, } = this;
-    const time = Math.floor(count / 2) + 1;
-    let ans;
-    if (count === 0) {
-      ans = location;
-    } else {
-      switch (r) {
-        case 0:
-          ans = location - time;
-          break;
-        case 1:
-          ans = location + time;
-          break;
-      }
-    }
-    return ans;
   }
 
   addItem(t) {

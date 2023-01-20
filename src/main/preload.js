@@ -24,4 +24,4 @@ setTimeout(() => {
   } catch (e) {
     ipc.send('drip/error', e);
   }
-}, 12);
+}, 13);
