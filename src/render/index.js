@@ -6,6 +6,8 @@ import communicate from '~/render/script/lib/communicate';
 import syncData from '~/render/script/lib/syncData';
 import focusAndBlur from '~/render/script/lib/focusAndBlur';
 
+//@TODO Alter ui.
+
 syncData();
 focusAndBlur();
 
