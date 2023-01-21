@@ -201,7 +201,7 @@ class TabButtons extends PointLineOffline {
 
   render() {
     const { id, } = this;
-    const { left, right, } = global;
+    const { left, right, } = this.state;
     let l = null;
     if (left !== undefined) {
       if (left > 0) {
