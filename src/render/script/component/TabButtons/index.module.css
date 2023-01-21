@@ -3,7 +3,10 @@
   display: inline-flex
   align-items: stretch
   justify-self: center
-  justify-content: center
   list-style-type: none
+  justify-content: center
   margin: 0
   padding: 0
+.middle
+  display: flex
+  justify-content: center

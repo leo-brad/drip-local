@@ -1,5 +1,4 @@
 import React from 'react';
-import { createPortal, } from 'react-dom';
 import style from './index.module.css';
 import OfflineComponent from '~/render/script/component/OfflineComponent';
 import InstanceIcon from '~/render/script/component/InstanceIcon';
@@ -13,7 +12,7 @@ const {
   status,
 } = global;
 
-class TabButton extends OfflineComponent {
+class TabMiddleButton extends OfflineComponent {
   constructor(props) {
     super(props);
     const {
@@ -23,16 +22,18 @@ class TabButton extends OfflineComponent {
       status: '',
       instance: '',
     };
+    this.roots = {};
     this.id = new Date().getTime().toString() + k;
     this.onClick = this.onClick.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
     this.changeInstance = this.changeInstance.bind(this);
-    if (!window.dynamic) {
-      window.dynamic = 1;
-    } else {
-      window.dynamic = 0;
-      this.componentDidMount();
-    }
+  }
+
+  ownDidMount() {
+    const { instance, } = global;
+    this.setState({
+      instance,
+    });
   }
 
   dealEvent(data) {
@@ -110,16 +111,6 @@ class TabButton extends OfflineComponent {
     const { instance, } = this.state;
     const active = instance === i;
     let cns = [style.tabButton, active ? style.active : null];
-    switch (t) {
-      case 'f':
-        cns.push(style.firstTabButton);
-        break;
-      case 'l':
-        cns.push(style.lastTabButton);
-        break;
-      default:
-        break;
-    }
     return(
       <button id={id} className={cns.join(' ')}>
         <InstanceIcon />{i}<Loader status={this.state.status} active={active} />
@@ -128,4 +119,4 @@ class TabButton extends OfflineComponent {
   }
 }
 
-export default TabButton;
+export default TabMiddleButton;

@@ -8,33 +8,7 @@ class PointLineOffline extends OfflineComponent {
     this.widths = {};
     this.doms = {};
     this.id = new Date().getTime().toString();
-    this.location = 0;
-  }
-
-  setLocation(location) {
-    const { ul, } = this;
-    for (const child of ul.children) {
-      child.remove();
-    }
-    this.location = location;
-    this.count = 0;
-    this.addItem(2);
-    this.count += 1;
-    ul.style.visibility = 'hidden';
-    while (true) {
-      const { count, } = this;
-      this.r = count % 2;
-      const { r, } = this;
-      if (count > this.data.length - 1) {
-        break;
-      }
-      this.addItem(r);
-      if (this.detectEdge()) {
-        break;
-      }
-      this.count += 1;
-    }
-    ul.style.visibility = 'visible';
+    this.position = 0;
   }
 
   getDom(key) {
@@ -74,55 +48,6 @@ class PointLineOffline extends OfflineComponent {
     return id + key;
   }
 
-  detectEdge() {
-    let ans = false;;
-    const { r, idx, li, isUpdate, } = this;
-    if (idx !== undefined && isUpdate) {
-      switch (r) {
-        case 1: {
-          const { right, } = this;
-          if (right !== undefined) {
-            const right = this.getRight(this.getKey(idx));
-            if (right > this.width) {
-              ans = true;
-              li.remove();
-            }
-          }
-          break;
-        }
-        case 0: {
-          if (left !== undefined) {
-            const left = this.getLeft(this.getKey(idx));
-            if (left < 0) {
-              ans = true;
-              li.remove();
-            }
-          }
-          break;
-        }
-      }
-    }
-    return ans;
-  }
-
-  getIndex() {
-    const { count, r, location, } = this;
-    const time = Math.floor(count / 2) + 1;
-    let ans;
-    if (count === 0) {
-      ans = location;
-    } else {
-      switch (r) {
-        case 0:
-          ans = location - time;
-          break;
-        case 1:
-          ans = location + time;
-          break;
-      }
-    }
-    return ans;
-  }
 }
 
 export default PointLineOffline;

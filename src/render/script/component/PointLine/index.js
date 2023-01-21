@@ -16,15 +16,15 @@ class PointLine extends React.Component {
     const ul = document.getElementById(id);
     this.ul = ul;
     this.width = ul.clientWidth;
-    this.setLocation(0);
+    this.setPosition(0);
   }
 
-  setLocation(location) {
+  setPosition(position) {
     const { ul, } = this;
     for (const child of ul.children) {
       child.remove();
     }
-    this.location = location;
+    this.position = position;
     this.count = 0;
     this.addItem(2);
     this.count += 1;

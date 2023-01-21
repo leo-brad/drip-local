@@ -5,6 +5,9 @@ const emitter = new Emitter();
 const location = new Location();
 
 const global = {
+  left: undefined,
+  right: undefined,
+  position: 0,
   location,
   error: null,
   router: null,

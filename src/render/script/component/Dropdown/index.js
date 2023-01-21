@@ -1,26 +1,75 @@
 import React from 'react';
 import style from './index.module.css';
+import OfflineComponent from '~/render/script/component/OfflineComponent';
+import global from '~/render/script/obj/global';
+
+const {
+  share: {
+    emitter,
+  },
+} = global;
 
 function formatUnit(val) {
   return val + 'px';
 }
 
-class Dropdown extends React.Component {
+class Dropdown extends OfflineComponent {
   constructor(props) {
     super(props);
     this.id = new Date().getTime().toString();
     this.state = {
-      data: ['instance4', 'instance5', 'instance6'],
+      data: [],
       height: undefined,
-      open: true,
+      open: false,
     };
+    this.dealEvent = this.dealEvent.bind(this);
     this.transition = this.transition.bind(this);
   }
 
-  componentDidMount() {
+  ownDidMount() {
     const { id, } = this;
     const dom = document.getElementById(id);
     this.dom = dom;
+  }
+
+  bind() {
+    emitter.on('dropdown', this.dealEvent);
+  }
+
+  remove() {
+    emitter.remove('dropdown', this.dealEvent);
+  }
+
+  dealEvent([event, t]) {
+    let open;
+    switch (event) {
+      case 'show': {
+        open = true;
+        break;
+      }
+      case 'hidden': {
+        open = false;
+        break;
+      }
+    }
+    switch (t) {
+      case 'l': {
+        const { left, instances, } = global;
+        this.setState({
+          open,
+          data: instances.slice(0, left),
+        });
+        break;
+      }
+      case 'r': {
+        const { right, instances, } = global;
+        this.setState({
+          open,
+          data: instances.slice(right + 1, instances.length),
+        });
+        break;
+      }
+    }
   }
 
   transition() {
