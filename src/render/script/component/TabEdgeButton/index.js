@@ -71,20 +71,16 @@ class TabEdgeButton extends OfflineComponent {
     let content;
     switch (t) {
       case 'l':
-        content = 'left';
         cns.push(style.leftTabButton);
         break;
       case 'r':
-        content = 'right';
         cns.push(style.rightTabButton);
         break;
       default:
         break;
     }
     return(
-      <button id={id} className={cns.join(' ')}>
-        {content}
-      </button>
+      <button id={id} className={cns.join(' ')} / >
     );
   }
 }

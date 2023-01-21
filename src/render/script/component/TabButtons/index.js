@@ -72,7 +72,9 @@ class TabButtons extends PointLineOffline {
   setPosition(position) {
     const { ul, } = this;
     for (const child of ul.children) {
-      child.remove();
+      if (child.tagName === 'li') {
+        child.remove();
+      }
     }
     global.position = position;
     this.count = 0;
@@ -213,8 +215,8 @@ class TabButtons extends PointLineOffline {
       }
     }
     return(
-      <ul className={style.buttonList}>
-        {l}<div id={id} className={style.middle}></div>{r}
+      <ul id={id} className={style.buttonList}>
+        {l}{r}
       </ul>
     );
   }
