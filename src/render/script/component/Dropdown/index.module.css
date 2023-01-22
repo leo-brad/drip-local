@@ -2,7 +2,6 @@
   position: absolute
   top: 39px
   width: 80%
-  height: 80%
   max-height: calc(80% - 30px)
   list-style-type: none
   padding: 0px
@@ -12,6 +11,7 @@
     0px -0.2px 4px rgba(170, 170, 170, 0.5)
   overflow: hidden
   z-index: 2
+  background-color: rgb(255, 255, 255)
 .item
   color: rgb(135, 135, 135)
   padding: 10px 12px 10px 12px

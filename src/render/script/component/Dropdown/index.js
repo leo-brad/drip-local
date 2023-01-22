@@ -1,6 +1,8 @@
 import React from 'react';
 import style from './index.module.css';
+import ReactDOM from 'react-dom/client';
 import RegionListOffline from '~/render/script/component/RegionListOffline';
+import renderToNode from '~/render/script/lib/renderToNode';
 import { done, } from '~/render/script/lib/utils';
 import global from '~/render/script/obj/global';
 
@@ -21,6 +23,7 @@ class Dropdown extends RegionListOffline {
       height: undefined,
       open: false,
     };
+    this.isFirst = true;
     this.data = [];
     this.dealBlur = this.dealBlur.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
@@ -111,7 +114,6 @@ class Dropdown extends RegionListOffline {
     const ul = document.getElementById(id);
     let ans = false;
     if (ul) {
-      console.log(ul);
       ans = true;
       this.ul = ul;
     }
@@ -124,23 +126,27 @@ class Dropdown extends RegionListOffline {
       height: this.height,
     });
     done(this.checkUl, () => {
-      const scrollTop = ul.scrollTop;
-      const height = ul.clientHeight;
-      const status = {
-        first: 0,
-        top: scrollTop,
-        bottom: scrollTop + height,
-        scrollTop: ul.scrollTop,
-      };
-      this.status = status;
-      this.bindEvent();
+      const { isFirst, } = this;
+      if (isFirst) {
+        const { ul, } = this;
+        const scrollTop = ul.scrollTop;
+        const height = ul.clientHeight;
+        const status = {
+          first: 0,
+          top: scrollTop,
+          bottom: scrollTop + height,
+          scrollTop: ul.scrollTop,
+        };
+        this.status = status;
+        this.initLast();
+        this.updateView('d');
+        this.bindEvent();
+      }
     });
   }
 
   setData(data) {
     this.data = data;
-    this.initLast();
-    this.updateView('d');
   }
 
   syncInsert(i, t) {
@@ -148,29 +154,29 @@ class Dropdown extends RegionListOffline {
     if (e) {
       const { id, ul, } = this;
       const k = id + i;
-      const component = <div className={style.item} key={i}>{e}</div>;
-      let item;
+      const div = <div key={i}>{e}</div>;
+      const item = renderToNode(div);
+      let component;
       switch (i) {
         case 0:
-          item = <li className={[style.item, style.firstItem].join(' ')} key={i}>{e}</li>;
+          component = <li className={[style.item, style.firstItem].join(' ')} key={i}>{e}</li>;
           break;
         case data.length - 1:
-          item = <li className={[style.item, style.lastItem].join(' ')} key={i}>{e}</li>;
+          component = <li className={[style.item, style.lastItem].join(' ')} key={i}>{e}</li>;
           break;
         default:
-          item = <li className={style.item} key={i}>{e}</li>;
+          component = <li className={style.item} key={i}>{e}</li>;
           break;
       }
-      const li = renderToNode(item);
       switch (t) {
         case 'd':
-          ul.append(li);
+          ul.append(item);
           break;
         case 'u':
-          ul.prepend(li);
+          ul.prepend(item);
           break;
       }
-      const root = ReactDOM.createRoot(li);
+      const root = ReactDOM.createRoot(item);
       root.render(component);
     }
   }

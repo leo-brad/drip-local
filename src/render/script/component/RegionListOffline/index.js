@@ -4,7 +4,6 @@ import OfflineComponent from '~/render/script/component/OfflineComponent';
 class RegionListOffline extends OfflineComponent {
   constructor(props) {
     super(props);
-    const { data, } = this.props;
 
     const id = new Date().getTime().toString();
     this.id = id;
@@ -40,7 +39,7 @@ class RegionListOffline extends OfflineComponent {
             }
           } = this;
           this.updateView('u');
-          if (last < this.props.data.length) {
+          if (last < this.data.length) {
             this.syncRemove('u');
           }
         }
@@ -78,10 +77,8 @@ class RegionListOffline extends OfflineComponent {
 
   initLast() {
     const { top, bottom, } = this.status;
-    if (bottom - top > 0) {
-      this.syncInsert(0, 'd');
-      this.status.last = 0;
-    }
+    this.syncInsert(0, 'd');
+    this.status.last = 0;
   }
 
   getKey(k) {
@@ -122,10 +119,10 @@ class RegionListOffline extends OfflineComponent {
   downView() {
     const { status, } = this;
     const { last, } = status;
-    if (last < this.props.data.length) {
+    if (last < this.data.length) {
       const top = this.getDomDownTop(this.getKey(last));
       if (top <= status.bottom) {
-        if (last + 1 < this.props.data.length) {
+        if (last + 1 < this.data.length) {
           this.addDownItem(last + 1);
           this.downView();
         }
@@ -135,7 +132,7 @@ class RegionListOffline extends OfflineComponent {
 
   addDownItem(k) {
     this.syncInsert(k, 'd');
-    if (k < this.props.data.length) {
+    if (k < this.data.length) {
       this.status.last = k;
     }
   }
@@ -166,7 +163,7 @@ class RegionListOffline extends OfflineComponent {
       case 'u': {
         const { status, } = this;
         const k = status.last;
-        if (k < this.props.data.length) {
+        if (k < this.data.length) {
           const top = this.getDomUpTop(this.getKey(k));
           const { id, ul, } = this;
           if (top >= this.status.scrollTop + this.getHeight(ul, id)) {
