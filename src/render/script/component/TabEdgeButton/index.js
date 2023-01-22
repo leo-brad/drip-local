@@ -21,6 +21,17 @@ class TabEdgeButton extends OfflineComponent {
     };
     this.id = new Date().getTime().toString() + 'teb';
     this.onClick = this.onClick.bind(this);
+    this.dealDropdown = this.dealDropdown.bind(this);
+  }
+
+  dealDropdown([event]) {
+    switch (event) {
+      case 'blur':
+        this.setState({
+          active: true,
+        });
+        break;
+    }
   }
 
   bind() {
@@ -28,6 +39,7 @@ class TabEdgeButton extends OfflineComponent {
     if (dom) {
       dom.addEventListener('click', this.onClick);
     }
+    emitter.on('dropdown', this.dealDropdown);
   }
 
   remove() {
@@ -35,6 +47,7 @@ class TabEdgeButton extends OfflineComponent {
     if (dom) {
       dom.removeEventListener('click', this.onClick);
     }
+    emitter.remove('dropdown', this.dealDropdown);
   }
 
   onClick(e) {

@@ -22,6 +22,7 @@ class Dropdown extends OfflineComponent {
       height: undefined,
       open: false,
     };
+    this.dealBlur = this.dealBlur.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
     this.transition = this.transition.bind(this);
   }
@@ -32,41 +33,53 @@ class Dropdown extends OfflineComponent {
     this.dom = dom;
   }
 
+  dealBlur(e) {
+    const parent = e.target.closest('ul');
+    if (parent !== this.dom) {
+      emitter.send('dropdown', ['blur']);
+      e.preventDefault();
+      e.stopPropagation();
+      this.close();
+    }
+  }
+
   bind() {
+    document.addEventListener('click', this.dealBlur);
     emitter.on('dropdown', this.dealEvent);
   }
 
   remove() {
+    document.removeEventListener('click', this.dealBlur);
     emitter.remove('dropdown', this.dealEvent);
   }
 
   dealEvent([event, t]) {
-    let open;
-    switch (event) {
-      case 'show': {
-        open = true;
-        break;
-      }
-      case 'hidden': {
-        open = false;
-        break;
-      }
-    }
+    let data;
     switch (t) {
       case 'l': {
         const { left, instances, } = global;
-        this.setState({
-          open,
-          data: instances.slice(0, left),
-        });
+        data = instances.slice(0, left);
         break;
       }
       case 'r': {
         const { right, instances, } = global;
+        data = instances.slice(right + 1, instances.length);
+        break;
+      }
+    }
+    switch (event) {
+      case 'show': {
         this.setState({
-          open,
-          data: instances.slice(right + 1, instances.length),
+          data,
         });
+        this.open();
+        break;
+      }
+      case 'hidden': {
+        this.setState({
+          data,
+        });
+        this.close();
         break;
       }
     }
@@ -77,6 +90,7 @@ class Dropdown extends OfflineComponent {
     const { dom, } = this;
     if (height === undefined) {
       height = dom.offsetHeight;
+      this.height = dom.offsetHeight;
     }
     const newHeight = height - 4;
     this.setState({
@@ -93,6 +107,14 @@ class Dropdown extends OfflineComponent {
 
   close() {
     this.transition();
+  }
+
+  open() {
+    const { height, } = this;
+    this.setState({
+      open: true,
+      height: height,
+    });
   }
 
   render() {
@@ -116,12 +138,13 @@ class Dropdown extends OfflineComponent {
     let list = null;
     const { open, } = this.state;
     if (open) {
-      list =
-        <ul id={id} className={style.dropdown} style={{ height: formatUnit(height) }}>
-          {items}
-        </ul>;
+      list = items;
     }
-    return list;
+    return(
+      <ul id={id} className={style.dropdown} style={{ height: formatUnit(height) }}>
+        {list}
+      </ul>
+    );
   }
 }
 

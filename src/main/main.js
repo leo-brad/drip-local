@@ -13,8 +13,8 @@ function dealMessage() {
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 850,
-    height: 600,
+    width: 900,
+    height: 650,
     webPreferences: {
       preload: path.resolve(__dirname, 'preload.js'),
     },
