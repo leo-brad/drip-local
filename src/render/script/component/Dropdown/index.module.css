@@ -2,6 +2,7 @@
   position: absolute
   top: 39px
   width: 80%
+  height: 80%
   max-height: calc(80% - 30px)
   list-style-type: none
   padding: 0px

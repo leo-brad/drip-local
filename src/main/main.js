@@ -14,12 +14,12 @@ function dealMessage() {
 function createWindow() {
   const win = new BrowserWindow({
     width: 900,
-    height: 650,
+    height: 625,
     webPreferences: {
       preload: path.resolve(__dirname, 'preload.js'),
     },
   });
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
   win.loadFile('./index.html');
   dealMessage();
 }
