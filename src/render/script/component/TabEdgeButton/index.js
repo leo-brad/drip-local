@@ -26,6 +26,7 @@ class TabEdgeButton extends OfflineComponent {
 
   dealDropdown([event]) {
     switch (event) {
+      case 'click':
       case 'blur':
         this.setState({
           active: true,
@@ -56,6 +57,7 @@ class TabEdgeButton extends OfflineComponent {
     this.setState({
       active: !active,
     });
+    global.type = t;
     switch (active) {
       case true:
         emitter.send('dropdown', ['show', t]);

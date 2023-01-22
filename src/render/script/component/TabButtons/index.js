@@ -24,6 +24,7 @@ class TabButtons extends PointLineOffline {
     this.data = [];
     this.hasData = false;
     this.updateView = this.updateView.bind(this);
+    this.positionChange = this.positionChange.bind(this);
   }
 
   ownDidMount() {
@@ -33,16 +34,22 @@ class TabButtons extends PointLineOffline {
     this.width = ul.clientWidth;
   }
 
+  positionChange(k) {
+    this.setPosition(k);
+  }
+
   bind() {
     emitter.on('main/reset', this.updateView);
     emitter.on('instance/add', this.updateView);
     emitter.on('instance/reduce', this.updateView);
+    emitter.on('position/change', this.positionChange);
   }
 
   remove() {
     emitter.remove('main/reset', this.updateView);
     emitter.remove('instance/add', this.updateView);
     emitter.remove('instance/reduce', this.updateView);
+    emitter.remove('position/change', this.positionChange);
   }
 
   updateView(data) {
@@ -72,7 +79,7 @@ class TabButtons extends PointLineOffline {
   setPosition(position) {
     const { ul, } = this;
     for (const child of ul.children) {
-      if (child.tagName === 'li') {
+      if (child.tagName === 'li'.toUpperCase()) {
         child.remove();
       }
     }
@@ -94,16 +101,39 @@ class TabButtons extends PointLineOffline {
       }
       this.count += 1;
     }
-    ul.style.visibility = 'visible';
     this.addEdgeButton();
+    ul.style.visibility = 'visible';
   }
 
   addEdgeButton() {
+    const { ul, } = this;
     const { left, right, } = global;
-    this.setState({
-      left,
-      right,
-    });
+    let component = null;
+    let type;
+    if (left !== undefined) {
+      if (left > 0) {
+        component = <TabEdgeButton t="l" />;
+        type = 'l';
+      }
+    }
+    if (right !== undefined) {
+      if (right < this.data.length - 1) {
+        component = <TabEdgeButton t="r" />;
+        type = 'r';
+      }
+    }
+    const id = this.id + type;
+    const node = renderToNode(<li id={id} />);
+    switch (type) {
+      case 'l':
+        ul.prepend(node);
+        break;
+      case 'r':
+        ul.append(node);
+        break;
+    }
+    const li = document.getElementById(id);
+    this.renderElement(li, component);
   }
 
   addItem(t) {
@@ -122,12 +152,14 @@ class TabButtons extends PointLineOffline {
         }
         case 1: {
           ul.append(node);
+          global.left = undefined;
           global.right = idx;
           break;
         }
         case 0: {
           ul.prepend(node);
           global.left = idx;
+          global.right = undefined;
           break;
         }
       }
@@ -201,23 +233,8 @@ class TabButtons extends PointLineOffline {
 
   render() {
     const { id, } = this;
-    const { left, right, } = this.state;
-    let l = null;
-    if (left !== undefined) {
-      if (left > 0) {
-        l = <TabEdgeButton t="l" />
-      }
-    }
-    let r = null;
-    if (right !== undefined) {
-      if (right < this.data.length - 1) {
-        r = <TabEdgeButton t="r" />
-      }
-    }
     return(
-      <ul id={id} className={style.buttonList}>
-        {l}{r}
-      </ul>
+      <ul id={id} className={style.buttonList} />
     );
   }
 }

@@ -10,42 +10,45 @@ class RegionListOffline extends OfflineComponent {
 
     this.doms = [];
     this.heights = [];
+    this.dealEvent = this.dealEvent.bind(this);
+  }
+
+  dealScroll(e) {
+    if (f = true) {
+      f = false;
+      setTimeout(() => {
+        f = true;
+      }, 1000 / 29);
+      const {
+        status: {
+          scrollTop,
+        },
+        id,
+      } = this;
+      if (ul.scrollTop > scrollTop) {
+        this.updateView('d');
+        if (this.status.first >= 0) {
+          this.syncRemove('d');
+        }
+      } else if (ul.scrollTop < scrollTop) {
+        const {
+          status: {
+            last,
+          }
+        } = this;
+        this.updateView('u');
+        if (last < this.data.length) {
+          this.syncRemove('u');
+        }
+      }
+      this.status.scrollTop = ul.scrollTop;
+    }
   }
 
   bindEvent() {
     const { ul, } = this;
     let f = true;
-    ul.addEventListener('scroll', (e) => {
-      if (f = true) {
-        f = false;
-        setTimeout(() => {
-          f = true;
-        }, 1000 / 29);
-        const {
-          status: {
-            scrollTop,
-          },
-          id,
-        } = this;
-        if (ul.scrollTop > scrollTop) {
-          this.updateView('d');
-          if (this.status.first >= 0) {
-            this.syncRemove('d');
-          }
-        } else if (ul.scrollTop < scrollTop) {
-          const {
-            status: {
-              last,
-            }
-          } = this;
-          this.updateView('u');
-          if (last < this.data.length) {
-            this.syncRemove('u');
-          }
-        }
-        this.status.scrollTop = ul.scrollTop;
-      }
-    });
+    ul.addEventListener('scroll', this.dealEvent);
   }
 
   updateView(t) {

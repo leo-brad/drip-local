@@ -23,8 +23,9 @@ class Dropdown extends RegionListOffline {
       height: undefined,
       open: false,
     };
-    this.isFirst = true;
+    this.first = true;
     this.data = [];
+    this.onClick = this.onClick.bind(this);
     this.dealBlur = this.dealBlur.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
     this.transition = this.transition.bind(this);
@@ -55,6 +56,8 @@ class Dropdown extends RegionListOffline {
   remove() {
     document.removeEventListener('click', this.dealBlur);
     emitter.remove('dropdown', this.dealEvent);
+    this.removeEvent();
+    ul.removeEventListener('click', this.onClick);
   }
 
   dealEvent([event, t]) {
@@ -126,9 +129,10 @@ class Dropdown extends RegionListOffline {
       height: this.height,
     });
     done(this.checkUl, () => {
-      const { isFirst, } = this;
-      if (isFirst) {
+      const { first, } = this;
+      if (first) {
         const { ul, } = this;
+        ul.addEventListener('click', this.onClick);
         const scrollTop = ul.scrollTop;
         const height = ul.clientHeight;
         const status = {
@@ -149,23 +153,49 @@ class Dropdown extends RegionListOffline {
     this.data = data;
   }
 
+  onClick(e) {
+    const { target, } = e;
+    if (target.tagName === 'li'.toUpperCase()) {
+      const k = target.getAttribute('k');
+      const { type, } = global;
+      let index;
+      switch (type) {
+        case 'l':
+          index =  parseInt(k);
+          break;
+        case 'r': {
+          const { right, } = global;
+          index = right + 1 + parseInt(k);
+          break;
+        }
+      }
+      emitter.send('position/change', index);
+      emitter.send('dropdown', ['click']);
+      const { instances, } = global;
+      emitter.send('instance/change', instances[index]);
+      this.close();
+    }
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   syncInsert(i, t) {
     const e = this.data[i];
     if (e) {
       const { id, ul, } = this;
       const k = id + i;
-      const div = <div key={i}>{e}</div>;
+      const div = <div id={k} key={i}>{e}</div>;
       const item = renderToNode(div);
       let component;
       switch (i) {
         case 0:
-          component = <li className={[style.item, style.firstItem].join(' ')} key={i}>{e}</li>;
+          component = <li className={[style.item, style.firstItem].join(' ')} k={i}>{e}</li>;
           break;
         case data.length - 1:
-          component = <li className={[style.item, style.lastItem].join(' ')} key={i}>{e}</li>;
+          component = <li className={[style.item, style.lastItem].join(' ')} k={i}>{e}</li>;
           break;
         default:
-          component = <li className={style.item} key={i}>{e}</li>;
+          component = <li className={style.item} k={i}>{e}</li>;
           break;
       }
       switch (t) {
