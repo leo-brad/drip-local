@@ -38,7 +38,7 @@ class PointLineOffline extends OfflineComponent {
   }
 
   getRight(key) {
-    const width = this.getWidth(key);
+    const width = this.getWidth();
     const left = this.getLeft(key);
     return left + width;
   }
@@ -47,7 +47,6 @@ class PointLineOffline extends OfflineComponent {
     const { id, } = this;
     return id + key;
   }
-
 }
 
 export default PointLineOffline;

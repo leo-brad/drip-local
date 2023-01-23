@@ -47,8 +47,14 @@ class RegionListOffline extends OfflineComponent {
 
   bindEvent() {
     const { ul, } = this;
-    let f = true;
     ul.addEventListener('scroll', this.dealEvent);
+  }
+
+  removeEvent() {
+    const { ul, } = this;
+    if (ul) {
+      ul.removeEventListener('scroll', this.dealEvent);
+    }
   }
 
   updateView(t) {

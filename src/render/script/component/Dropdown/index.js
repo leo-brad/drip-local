@@ -2,8 +2,8 @@ import React from 'react';
 import style from './index.module.css';
 import ReactDOM from 'react-dom/client';
 import RegionListOffline from '~/render/script/component/RegionListOffline';
+import CheckSyncDom from '~/render/script/class/CheckSyncDom';
 import renderToNode from '~/render/script/lib/renderToNode';
-import { done, } from '~/render/script/lib/utils';
 import global from '~/render/script/obj/global';
 
 const {
@@ -24,12 +24,13 @@ class Dropdown extends RegionListOffline {
       open: false,
     };
     this.first = true;
+    this.roots = {};
     this.data = [];
     this.onClick = this.onClick.bind(this);
     this.dealBlur = this.dealBlur.bind(this);
     this.dealEvent = this.dealEvent.bind(this);
     this.transition = this.transition.bind(this);
-    this.checkUl = this.checkUl.bind(this);
+    this.checkUi = this.checkUi.bind(this);
   }
 
   ownDidMount() {
@@ -57,7 +58,10 @@ class Dropdown extends RegionListOffline {
     document.removeEventListener('click', this.dealBlur);
     emitter.remove('dropdown', this.dealEvent);
     this.removeEvent();
-    ul.removeEventListener('click', this.onClick);
+    const { ul, } = this;
+    if (ul) {
+      ul.removeEventListener('click', this.onClick);
+    }
   }
 
   dealEvent([event, t]) {
@@ -112,7 +116,7 @@ class Dropdown extends RegionListOffline {
     this.transition();
   }
 
-  checkUl() {
+  checkUi() {
     const { id, } = this;
     const ul = document.getElementById(id);
     let ans = false;
@@ -128,7 +132,7 @@ class Dropdown extends RegionListOffline {
       open: true,
       height: this.height,
     });
-    done(this.checkUl, () => {
+    new CheckSyncDom(this.checkUi, () => {
       const { first, } = this;
       if (first) {
         const { ul, } = this;
@@ -146,7 +150,7 @@ class Dropdown extends RegionListOffline {
         this.updateView('d');
         this.bindEvent();
       }
-    });
+    }).start();
   }
 
   setData(data) {
@@ -182,7 +186,7 @@ class Dropdown extends RegionListOffline {
   syncInsert(i, t) {
     const e = this.data[i];
     if (e) {
-      const { id, ul, } = this;
+      const { id, ul, data, } = this;
       const k = id + i;
       const div = <div id={k} key={i}>{e}</div>;
       const item = renderToNode(div);
@@ -206,7 +210,19 @@ class Dropdown extends RegionListOffline {
           ul.prepend(item);
           break;
       }
-      const root = ReactDOM.createRoot(item);
+      this.renderElement(item, component, k);
+    }
+  }
+
+  renderElement(container, component, id) {
+    if (container) {
+      const { roots, } = this;
+      let root;
+      if (roots[id] === undefined) {
+        root = ReactDOM.createRoot(container);
+      } else {
+        root = roots[id];
+      }
       root.render(component);
     }
   }

@@ -4,6 +4,7 @@ import style from './index.module.css';
 import PointLineOffline from '~/render/script/component/PointLineOffline';
 import TabMiddleButton from '~/render/script/component/TabMiddleButton';
 import TabEdgeButton from '~/render/script/component/TabEdgeButton';
+import CheckSyncDom from '~/render/script/class/CheckSyncDom';
 import renderToNode from '~/render/script/lib/renderToNode';
 import global from '~/render/script/obj/global';
 
@@ -21,8 +22,11 @@ class TabButtons extends PointLineOffline {
       left: undefined,
       right: undefined,
     };
+    this.empty = 0;
     this.data = [];
+    this.roots = {};
     this.hasData = false;
+    this.checkUi = this.checkUi.bind(this);
     this.updateView = this.updateView.bind(this);
     this.positionChange = this.positionChange.bind(this);
   }
@@ -76,6 +80,26 @@ class TabButtons extends PointLineOffline {
     this.setPosition(position);
   }
 
+  checkUi() {
+    const { ul, } = this;
+    let time = 0;
+    let ans = false;
+    for (let li of ul.children) {
+      const child = li.children[0];
+      if (child) {
+        if (child.tagName === 'button'.toUpperCase()) {
+          time += 1;
+          const { count, empty, } = this;
+          if (time === count - empty) {
+            ans = true;
+            break;
+          }
+        }
+      }
+    }
+    return ans;
+  }
+
   setPosition(position) {
     const { ul, } = this;
     for (const child of ul.children) {
@@ -84,6 +108,7 @@ class TabButtons extends PointLineOffline {
       }
     }
     global.position = position;
+    this.empty = 0;
     this.count = 0;
     this.addItem(2);
     this.count += 1;
@@ -101,8 +126,10 @@ class TabButtons extends PointLineOffline {
       }
       this.count += 1;
     }
-    this.addEdgeButton();
-    ul.style.visibility = 'visible';
+    new CheckSyncDom(this.checkUi, () => {
+      this.addEdgeButton();
+      ul.style.visibility = 'visible';
+    }).start();
   }
 
   addEdgeButton() {
@@ -133,7 +160,7 @@ class TabButtons extends PointLineOffline {
         break;
     }
     const li = document.getElementById(id);
-    this.renderElement(li, component);
+    this.renderElement(li, component, id);
   }
 
   addItem(t) {
@@ -147,6 +174,8 @@ class TabButtons extends PointLineOffline {
       const node = renderToNode(<li id={id} />);
       switch (t) {
         case 2: {
+          global.left = undefined;
+          global.right = undefined;
           ul.append(node);
           break;
         }
@@ -165,9 +194,10 @@ class TabButtons extends PointLineOffline {
       }
       this.li = document.getElementById(id);
       const { li, } = this;
-      this.renderElement(li, component);
+      this.renderElement(li, component, id);
       this.isUpdate = true;
     } else {
+      this.empty += 1;
       this.isUpdate = false;
     }
   }
@@ -224,9 +254,15 @@ class TabButtons extends PointLineOffline {
     return ans;
   }
 
-  renderElement(container, component) {
+  renderElement(container, component, id) {
     if (container) {
-      const root = ReactDOM.createRoot(container);
+      const { roots, } = this;
+      let root;
+      if (roots[id] === undefined) {
+        root = ReactDOM.createRoot(container);
+      } else {
+        root = roots[id];
+      }
       root.render(component);
     }
   }
