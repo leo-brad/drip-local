@@ -1,4 +1,5 @@
 import React from 'react';
+import check from '~/render/script/lib/check';
 import OfflineComponent from '~/render/script/component/OfflineComponent';
 
 class PointLineOffline extends OfflineComponent {
@@ -9,20 +10,31 @@ class PointLineOffline extends OfflineComponent {
     this.doms = {};
     this.id = new Date().getTime().toString();
     this.position = 0;
+    this.checkDom = this.checkDom.bind(this);
   }
 
-  getDom(key) {
+  checkDom(key) {
+    const dom = document.getElementById(key);
+    let ans = false;
+    if (dom !== null) {
+      ans = true;
+    }
+    return ans;
+  }
+
+  async getDom(key) {
     const { doms, } = this;
     if (doms[key] === undefined) {
+      await check(() => this.checkDom(key));
       doms[key] = document.getElementById(key);
     }
     return doms[key];
   }
 
-  getWidth(key) {
+  async getWidth(key) {
     const { widths, } = this;
     if (widths[key] === undefined) {
-      const dom = this.getDom(key);
+      const dom = await this.getDom(key);
       if (dom) {
         widths[key] = dom.clientWidth;
       }
@@ -30,16 +42,16 @@ class PointLineOffline extends OfflineComponent {
     return widths[key];
   }
 
-  getLeft(key) {
-    const dom = this.getDom(key);
+  async getLeft(key) {
+    const dom = await this.getDom(key);
     if (dom) {
       return dom.offsetLeft;
     }
   }
 
-  getRight(key) {
-    const width = this.getWidth();
-    const left = this.getLeft(key);
+  async getRight(key) {
+    const width = await this.getWidth(key);
+    const left = await this.getLeft(key);
     return left + width;
   }
 

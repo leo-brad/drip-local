@@ -2,7 +2,7 @@ import React from 'react';
 import style from './index.module.css';
 import ReactDOM from 'react-dom/client';
 import RegionListOffline from '~/render/script/component/RegionListOffline';
-import CheckSyncDom from '~/render/script/class/CheckSyncDom';
+import check from '~/render/script/lib/check';
 import renderToNode from '~/render/script/lib/renderToNode';
 import global from '~/render/script/obj/global';
 
@@ -127,30 +127,35 @@ class Dropdown extends RegionListOffline {
     return ans;
   }
 
-  open() {
+  async open() {
     this.setState({
       open: true,
-      height: this.height,
     });
-    new CheckSyncDom(this.checkUi, () => {
-      const { first, } = this;
-      if (first) {
-        const { ul, } = this;
-        ul.addEventListener('click', this.onClick);
-        const scrollTop = ul.scrollTop;
-        const height = ul.clientHeight;
-        const status = {
-          first: 0,
-          top: scrollTop,
-          bottom: scrollTop + height,
-          scrollTop: ul.scrollTop,
-        };
-        this.status = status;
-        this.initLast();
-        this.updateView('d');
-        this.bindEvent();
-      }
-    }).start();
+    await check(this.checkUi);
+    const { ul, } = this;
+    ul.style.height = 'auto';
+    this.init();
+    const { first, } = this;
+    if (first) {
+      this.bindEvent();
+      this.first = false;
+    }
+  }
+
+  init() {
+    const { ul, } = this;
+    ul.addEventListener('click', this.onClick);
+    const scrollTop = ul.scrollTop;
+    const height = ul.clientHeight;
+    const status = {
+      first: 0,
+      top: scrollTop,
+      bottom: scrollTop + height,
+      scrollTop: ul.scrollTop,
+    };
+    this.status = status;
+    this.initLast();
+    this.updateView('d');
   }
 
   setData(data) {

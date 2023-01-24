@@ -34,10 +34,8 @@ function syncInstance() {
     } = global;
     if (instances.length === 0) {
       global.instance = instance;
-      setTimeout(() => {
-        const event = 'instance/add/first';
-        emitter.send(instance, [event]);
-      }, 0);
+      const event = 'instance/add/first';
+      emitter.send(instance, [event]);
     }
     global.instances.push(instance);
   });

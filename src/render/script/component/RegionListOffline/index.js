@@ -10,50 +10,49 @@ class RegionListOffline extends OfflineComponent {
 
     this.doms = [];
     this.heights = [];
-    this.dealEvent = this.dealEvent.bind(this);
+    this.bindEvent = this.bindEvent.bind(this);
   }
 
-  dealScroll(e) {
-    if (f = true) {
-      f = false;
+  async dealScroll(e) {
+    await new Promise((resolve, reject) => {
       setTimeout(() => {
-        f = true;
+        resolve();
       }, 1000 / 29);
+    });
+    const {
+      status: {
+        scrollTop,
+      },
+      id,
+    } = this;
+    if (ul.scrollTop > scrollTop) {
+      this.updateView('d');
+      if (this.status.first >= 0) {
+        this.syncRemove('d');
+      }
+    } else if (ul.scrollTop < scrollTop) {
       const {
         status: {
-          scrollTop,
-        },
-        id,
+          last,
+        }
       } = this;
-      if (ul.scrollTop > scrollTop) {
-        this.updateView('d');
-        if (this.status.first >= 0) {
-          this.syncRemove('d');
-        }
-      } else if (ul.scrollTop < scrollTop) {
-        const {
-          status: {
-            last,
-          }
-        } = this;
-        this.updateView('u');
-        if (last < this.data.length) {
-          this.syncRemove('u');
-        }
+      this.updateView('u');
+      if (last < this.data.length) {
+        this.syncRemove('u');
       }
-      this.status.scrollTop = ul.scrollTop;
     }
+    this.status.scrollTop = ul.scrollTop;
   }
 
   bindEvent() {
     const { ul, } = this;
-    ul.addEventListener('scroll', this.dealEvent);
+    ul.addEventListener('scroll', this.dealScroll);
   }
 
   removeEvent() {
     const { ul, } = this;
     if (ul) {
-      ul.removeEventListener('scroll', this.dealEvent);
+      ul.removeEventListener('scroll', this.dealScroll);
     }
   }
 
