@@ -22,7 +22,13 @@ export default function renderToNode(component) {
         }
       }
       default:
-        elem.setAttribute(k, props[k]);
+        switch (k) {
+          case 'className':
+            elem.setAttribute('class', props[k]);
+            break;
+          default:
+          elem.setAttribute(k, props[k]);
+        }
         break;
     }
   });

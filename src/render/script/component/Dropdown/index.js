@@ -213,8 +213,6 @@ class Dropdown extends RegionListOffline {
     if (e) {
       const { id, ul, data, } = this;
       const k = id + i;
-      const div = <div id={k} key={i}>{e}</div>;
-      const item = renderToNode(div);
       let component;
       switch (i) {
         case 0:
@@ -227,28 +225,15 @@ class Dropdown extends RegionListOffline {
           component = <li className={style.item} k={i}>{e}</li>;
           break;
       }
+      const li = renderToNode(component);
       switch (t) {
         case 'd':
-          ul.append(item);
+          ul.append(li);
           break;
         case 'u':
-          ul.prepend(item);
+          ul.prepend(li);
           break;
       }
-      this.renderElement(item, component, k);
-    }
-  }
-
-  renderElement(container, component, id) {
-    if (container) {
-      const { roots, } = this;
-      let root;
-      if (roots[id] === undefined) {
-        root = ReactDOM.createRoot(container);
-      } else {
-        root = roots[id];
-      }
-      root.render(component);
     }
   }
 
