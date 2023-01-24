@@ -20,7 +20,7 @@ class Dropdown extends RegionListOffline {
   constructor(props) {
     super(props);
     this.state = {
-      height: undefined,
+      height: 0,
       open: false,
     };
     this.first = true;
@@ -92,22 +92,22 @@ class Dropdown extends RegionListOffline {
     }
   }
 
-  transition() {
-    let { height, } = this.state;
+  async transition() {
     const { ul, } = this;
-    if (height === undefined) {
-      height = ul.offsetHeight;
-      this.height = ul.offsetHeight;
+    let { height, } = this.state;
+    if (height === 0) {
+      height = ul.clientHeight;
     }
     const newHeight = height - 4;
     this.setState({
       height: newHeight,
     });
     if (newHeight > 0) {
-      window.requestAnimationFrame(this.transition);
+      requestAnimationFrame(this.transition);
     } else {
       this.setState({
         open: false,
+        height: 0,
       });
     }
   }
