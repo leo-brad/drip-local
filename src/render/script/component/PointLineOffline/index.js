@@ -13,6 +13,11 @@ class PointLineOffline extends OfflineComponent {
     this.checkDom = this.checkDom.bind(this);
   }
 
+  clean() {
+    this.widths = {};
+    this.doms = {};
+  }
+
   checkDom(key) {
     const dom = document.getElementById(key);
     let ans = false;

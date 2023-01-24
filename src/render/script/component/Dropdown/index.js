@@ -68,12 +68,18 @@ class Dropdown extends RegionListOffline {
     let data;
     switch (t) {
       case 'l': {
-        const { left, instances, } = global;
+        let { left, instances, } = global;
+        if (left === undefined) {
+          left = 0;
+        }
         data = instances.slice(0, left);
         break;
       }
       case 'r': {
-        const { right, instances, } = global;
+        let { right, instances, } = global;
+        if (right === undefined) {
+          right = instances.length - 1;
+        }
         data = instances.slice(right + 1, instances.length);
         break;
       }
@@ -81,11 +87,19 @@ class Dropdown extends RegionListOffline {
     switch (event) {
       case 'show': {
         this.setData(data);
+        const { open, } = this.state;
+        if (open) {
+          this.close();
+        }
         this.open();
         break;
       }
       case 'hidden': {
         this.setData(data);
+        const { open, } = this.state;
+        if (!open) {
+          this.open();
+        }
         this.close();
         break;
       }
@@ -96,9 +110,13 @@ class Dropdown extends RegionListOffline {
     const { ul, } = this;
     let { height, } = this.state;
     if (height === 0) {
-      height = ul.clientHeight;
+      if (ul) {
+        check(this.checkUi);
+        height = ul.clientHeight;
+        this.height = height;
+      }
     }
-    const newHeight = height - 4;
+    const newHeight = height - this.height * 0.05;
     this.setState({
       height: newHeight,
     });
@@ -112,8 +130,8 @@ class Dropdown extends RegionListOffline {
     }
   }
 
-  close() {
-    this.transition();
+  async close() {
+    await this.transition();
   }
 
   checkUi() {
@@ -128,6 +146,7 @@ class Dropdown extends RegionListOffline {
   }
 
   async open() {
+    const { data, } = this;
     this.setState({
       open: true,
     });
@@ -144,6 +163,7 @@ class Dropdown extends RegionListOffline {
 
   init() {
     const { ul, } = this;
+    ul.innerHTML = '';
     ul.addEventListener('click', this.onClick);
     const scrollTop = ul.scrollTop;
     const height = ul.clientHeight;

@@ -24,6 +24,7 @@ class TabButtons extends PointLineOffline {
     this.roots = {};
     this.hasData = false;
     this.checkButtons = this.checkButtons.bind(this);
+    this.checkEmpty = this.checkEmpty.bind(this);
     this.updateView = this.updateView.bind(this);
     this.positionChange = this.positionChange.bind(this);
   }
@@ -77,6 +78,11 @@ class TabButtons extends PointLineOffline {
     this.setPosition(position);
   }
 
+  checkEmpty() {
+    const { ul, } = this;
+    return ul.children.length === 0;
+  }
+
   checkButtons() {
     const { id, } = this;
     const ul = document.getElementById(id);
@@ -104,10 +110,13 @@ class TabButtons extends PointLineOffline {
     const { ul, } = this;
     for (const child of ul.children) {
       if (child.tagName === 'li'.toUpperCase()) {
-        child.remove();
+      child.remove();
       }
     }
+    this.clean();
     global.position = position;
+    global.left = undefined;
+    global.right = undefined;
     this.num = 0;
     this.count = 0;
     this.addItem(2);
@@ -148,34 +157,41 @@ class TabButtons extends PointLineOffline {
   addEdgeButton() {
     const { ul, } = this;
     const { left, right, } = global;
-    let component = null;
-    let type;
+    const types = [];
+    const components = [];
     if (left !== undefined) {
       if (left > 0) {
-        component = <TabEdgeButton t="l" />;
-        type = 'l';
+        components[0] = <TabEdgeButton t="l" />;
+        types.push('l');
       }
     }
+    let r = null;
     if (right !== undefined) {
       if (right < this.data.length - 1) {
-        component = <TabEdgeButton t="r" />;
-        type = 'r';
+        components[1] = <TabEdgeButton t="r" />;
+        types.push('r');
       }
     }
-    if (component !== null) {
-      const id = this.id + type;
+    types.forEach((t) => {
+      const id = this.id + t;
       const node = renderToNode(<li id={id} />);
-      switch (type) {
-        case 'l':
+      switch (t) {
+        case 'l': {
           ul.prepend(node);
+          const li = document.getElementById(id);
+          const [l] = components;
+          this.renderElement(li, l, id);
           break;
-        case 'r':
+        }
+        case 'r': {
           ul.append(node);
+          const li = document.getElementById(id);
+          const [_, r] = components;
+          this.renderElement(li, r, id);
           break;
+        }
       }
-      const li = document.getElementById(id);
-      this.renderElement(li, component, id);
-    }
+    });
   }
 
   addItem(t) {
@@ -247,8 +263,6 @@ class TabButtons extends PointLineOffline {
           const { right, } = global;
           if (right !== undefined) {
             const right = await this.getRight(this.key);
-            console.log('right', right);
-            console.log('this.width', this.width);
             if (right > this.width) {
               ans = true;
               li.remove();
