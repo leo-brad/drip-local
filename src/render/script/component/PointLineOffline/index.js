@@ -11,6 +11,7 @@ class PointLineOffline extends OfflineComponent {
     this.id = new Date().getTime().toString();
     this.position = 0;
     this.checkDom = this.checkDom.bind(this);
+    this.checkButton = this.checkButton.bind(this);
   }
 
   clean() {
@@ -36,11 +37,21 @@ class PointLineOffline extends OfflineComponent {
     return doms[key];
   }
 
+  checkButton(li) {
+    const button = li.children[0];
+    let ans = false;
+    if (button && button.tagName === 'button'.toUpperCase()) {
+      ans = true;
+    }
+    return ans;
+  }
+
   async getWidth(key) {
     const { widths, } = this;
     if (widths[key] === undefined) {
       const dom = await this.getDom(key);
       if (dom) {
+        await check(() => this.checkButton(dom));
         widths[key] = dom.clientWidth;
       }
     }

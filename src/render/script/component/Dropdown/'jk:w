@@ -203,10 +203,13 @@ class Dropdown extends RegionListOffline {
   onClick(e) {
     const { target, } = e;
     if (target.tagName === 'li'.toUpperCase()) {
-      const index = parseInt(target.getAttribute('p'));
+      const p = target.getAttribute('p');
+      const index = getIndex(parseInt(p));
+      console.log(index);
       emitter.send('position/change', index);
       emitter.send('dropdown', ['click']);
       const { instances, } = global;
+      console.log(instances[index]);
       emitter.send('instance/change', instances[index]);
       this.close();
     }
