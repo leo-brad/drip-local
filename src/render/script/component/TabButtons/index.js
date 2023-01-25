@@ -33,7 +33,7 @@ class TabButtons extends PointLineOffline {
     const { id, } = this;
     const ul = document.getElementById(id);
     this.ul = ul;
-    this.width = ul.offsetWidth;
+    this.width = ul.offsetWidth - 22;
     this.left = ul.offsetLeft;
   }
 
@@ -133,9 +133,6 @@ class TabButtons extends PointLineOffline {
         break;
       }
       this.count += 1;
-      if (this.count > 20) {
-        break;
-      }
     }
     await check(this.checkButtons);
     this.clearEmpty();
@@ -175,11 +172,11 @@ class TabButtons extends PointLineOffline {
     }
     types.forEach((t) => {
       const id = this.id + t;
-      const node = renderToNode(<li id={id} />);
       const dom = document.getElementById(id);
       if (dom) {
         dom.remove();
       }
+      const node = renderToNode(<li id={id} />);
       switch (t) {
         case 'l': {
           ul.prepend(node);
@@ -261,15 +258,16 @@ class TabButtons extends PointLineOffline {
 
   async detectEdge() {
     let ans = false;;
-    const { r, idx, li, isUpdate, } = this;
+    const { r, idx, isUpdate, } = this;
     if (idx !== undefined && isUpdate) {
       switch (r) {
         case 1: {
           const { right, } = global;
           if (right !== undefined) {
             const right = await this.getRight(this.key);
-            if (right > this.width) {
+            if (right > this.width || right === 0) {
               ans = true;
+              const { li, } = this;
               li.remove();
               this.num -= 1;
               global.right -= 1;
@@ -281,8 +279,9 @@ class TabButtons extends PointLineOffline {
           const { left, }= global;
           if (left !== undefined) {
             const left = await this.getLeft(this.key);
-            if (left < this.left) {
+            if (left < this.left || left === 0) {
               ans = true;
+              const { li, } = this;
               li.remove();
               this.num -= 1;
               global.left += 1;
