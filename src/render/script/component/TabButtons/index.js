@@ -160,13 +160,17 @@ class TabButtons extends PointLineOffline {
     const types = [];
     const components = [];
     if (left !== undefined) {
-      components[0] = <TabEdgeButton t="l" />;
-      types.push('l');
+      if (left > 0) {
+        components[0] = <TabEdgeButton t="l" />;
+        types.push('l');
+      }
     }
     let r = null;
     if (right !== undefined) {
-      components[1] = <TabEdgeButton t="r" />;
-      types.push('r');
+      if (right < this.data.length - 1) {
+        components[1] = <TabEdgeButton t="r" />;
+        types.push('r');
+      }
     }
     types.forEach((t) => {
       const id = this.id + t;
@@ -194,7 +198,6 @@ class TabButtons extends PointLineOffline {
     });
   }
 
-  // 0, 1, 2, 3
   setType(t) {
     const { type, } = this;
     switch (t) {
@@ -216,51 +219,53 @@ class TabButtons extends PointLineOffline {
   addItem(t) {
     const { ul, id, } = this;
     const idx = this.getIndex();
-    const d = this.data[idx];
-    if (idx < 0) {
-      this.setType('l');
-    }
-    if (idx > this.data.length - 1) {
-      this.setType('r');
-    }
-    if (d !== undefined) {
-      this.idx = idx;
-      const id = this.getKey(idx);
-      this.key = id;
-      const component = <TabMiddleButton i={d} k={idx}>{d}</TabMiddleButton>;
-      const node = renderToNode(<li id={id} />);
-      switch (t) {
-        case 2: {
-          global.left = undefined;
-          global.right = undefined;
-          ul.append(node);
-          break;
-        }
-        case 1: {
-          ul.append(node);
-          global.right = idx;
-          break;
-        }
-        case 0: {
-          ul.prepend(node);
-          global.left = idx;
-          break;
-        }
+    if (idx >= 0 && idx < this.data.length) {
+      const d = this.data[idx];
+      if (idx < 0) {
+        this.setType('l');
       }
-      this.li = document.getElementById(id);
-      const { li, } = this;
-      this.renderElement(li, component, id);
-      this.isUpdate = true;
-      this.num += 1;
-    } else {
-      this.isUpdate = false;
+      if (idx > this.data.length - 1) {
+        this.setType('r');
+      }
+      if (d !== undefined) {
+        this.idx = idx;
+        const id = this.getKey(idx);
+        this.key = id;
+        const component = <TabMiddleButton i={d} k={idx}>{d}</TabMiddleButton>;
+        const node = renderToNode(<li id={id} />);
+        switch (t) {
+          case 2: {
+            global.left = undefined;
+            global.right = undefined;
+            ul.append(node);
+            break;
+          }
+          case 1: {
+            ul.append(node);
+            global.right = idx;
+            break;
+          }
+          case 0: {
+            ul.prepend(node);
+            global.left = idx;
+            break;
+          }
+        }
+        this.li = document.getElementById(id);
+        const { li, } = this;
+        this.renderElement(li, component, id);
+        this.isUpdate = true;
+        this.num += 1;
+      } else {
+        this.isUpdate = false;
+      }
     }
   }
 
   getIndex() {
     const { position, } = global;
     const { count, r, } = this;
-    const time = Math.floor(count / 2) + 1;
+    const time = Math.floor((count - 1) / 2) + 1;
     let ans;
     if (count === 0) {
       ans = position;
@@ -291,7 +296,7 @@ class TabButtons extends PointLineOffline {
               const { li, } = this;
               li.remove();
               this.num -= 1;
-              global.right -= 1;
+              global.right = this.idx - 1;
             }
           }
           break;
@@ -305,7 +310,7 @@ class TabButtons extends PointLineOffline {
               const { li, } = this;
               li.remove();
               this.num -= 1;
-              global.left += 1;
+              global.left = this.idx + 1;
             }
           }
           break;

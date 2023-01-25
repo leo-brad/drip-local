@@ -13,13 +13,11 @@ const {
 class TabEdgeButton extends OfflineComponent {
   constructor(props) {
     super(props);
-    const {
-      k,
-    } = this.props;
+    const { t, } = this.props;
     this.state = {
       active: true,
     };
-    this.id = new Date().getTime().toString() + 'teb';
+    this.id = new Date().getTime().toString() + t;
     this.onClick = this.onClick.bind(this);
     this.dealDropdown = this.dealDropdown.bind(this);
   }
@@ -79,8 +77,8 @@ class TabEdgeButton extends OfflineComponent {
   }
 
   render() {
-    const { id, } = this;
     const { t, } = this.props;
+    const { id, } = this;
     const { active, } = this.state;
     let cns = [style.tabButton, active ? style.active : null];
     let content;

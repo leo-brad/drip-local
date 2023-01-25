@@ -96,7 +96,7 @@ class Dropdown extends RegionListOffline {
       case 'r': {
         let { right, instances, } = global;
         if (right === undefined) {
-          right = instances.length - 1;
+          right = instances.length - 2;
         }
         data = instances.slice(right + 1, instances.length);
         break;
