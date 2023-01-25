@@ -112,8 +112,6 @@ class TabButtons extends PointLineOffline {
     ul.innerHTML = '';
     this.clean();
     global.position = position;
-    global.left = undefined;
-    global.right = undefined;
     this.type = 0;
     this.num = 0;
     this.count = 0;
@@ -240,14 +238,12 @@ class TabButtons extends PointLineOffline {
         }
         case 1: {
           ul.append(node);
-          global.left = undefined;
           global.right = idx;
           break;
         }
         case 0: {
           ul.prepend(node);
           global.left = idx;
-          global.right = undefined;
           break;
         }
       }
