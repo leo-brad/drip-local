@@ -75,6 +75,24 @@ class PointLineOffline extends OfflineComponent {
     const { id, } = this;
     return id + key;
   }
+
+  setType(t) {
+    const { type, } = this;
+    switch (t) {
+      case 'l': {
+        if (Math.floor(type / 2) !== 1) {
+          this.type += 2;
+        }
+        break;
+      }
+      case 'r': {
+        if (type % 2 !== 1) {
+          this.type += 1;
+        }
+        break;
+      }
+    }
+  }
 }
 
 export default PointLineOffline;

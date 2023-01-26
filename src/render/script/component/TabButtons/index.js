@@ -198,24 +198,6 @@ class TabButtons extends PointLineOffline {
     });
   }
 
-  setType(t) {
-    const { type, } = this;
-    switch (t) {
-      case 'l': {
-        if (Math.floor(type / 2) !== 1) {
-          this.type += 2;
-        }
-        break;
-      }
-      case 'r': {
-        if (type % 2 !== 1) {
-          this.type += 1;
-        }
-        break;
-      }
-    }
-  }
-
   addItem(t) {
     const { ul, id, } = this;
     const idx = this.getIndex();
@@ -235,9 +217,9 @@ class TabButtons extends PointLineOffline {
         const node = renderToNode(<li id={id} />);
         switch (t) {
           case 2: {
+            ul.append(node);
             global.left = undefined;
             global.right = undefined;
-            ul.append(node);
             break;
           }
           case 1: {
