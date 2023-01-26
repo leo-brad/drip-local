@@ -33,7 +33,6 @@ function getIndex(i) {
   return ans;
 }
 
-
 class Dropdown extends RegionListOffline {
   constructor(props) {
     super(props);

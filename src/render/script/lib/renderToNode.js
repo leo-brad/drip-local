@@ -1,6 +1,3 @@
-import { renderToStaticMarkup, } from 'react-dom/server';
-import global from '~/render/script/obj/global';
-
 export default function renderToNode(component) {
   const elem = document.createElement(component.type);
   const { props, } = component;
