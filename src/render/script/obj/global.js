@@ -20,7 +20,6 @@ const global = {
   instances: [],
   status: {},
   share: {
-    template: null,
     emitter,
     focus: true,
   },
