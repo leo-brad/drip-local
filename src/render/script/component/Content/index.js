@@ -39,8 +39,7 @@ class Content extends OfflineComponent {
       this.setState({
         instance,
       });
-      await check(this.checkContent);
-      this.sendMountAndUnmount();
+      await this.sendMountAndUnmount();
     }
   }
 
@@ -57,8 +56,14 @@ class Content extends OfflineComponent {
     const dom = this.getDom();
     let ans = false;
     if (dom) {
-      if (dom.children.length !== 0) {
-        ans = true;
+      const content = dom.children[0];
+      if (content) {
+        const {
+          instance,
+        } = global;
+        if (content.id.includes(instance)) {
+          ans = true;
+        }
       }
     }
     return ans;
@@ -73,12 +78,18 @@ class Content extends OfflineComponent {
     }
   }
 
-  sendMountAndUnmount() {
+  async sendMountAndUnmount() {
     const { instance: beforeInstance, } = this;
     if (beforeInstance) {
       let event = 'unmount';
       emitter.send(beforeInstance, [event]);
     }
+
+    const dom = this.getDom();
+    if (dom) {
+      await check(this.checkContent);
+    }
+
     const { instance, } = global;
     event = 'mount';
     emitter.send(instance, [event]);
@@ -123,7 +134,7 @@ class Content extends OfflineComponent {
           const [_, i] = instance.match(regexp);
           const Pkg = pkg[i];
           const { share, } = global;
-          component[instance] = <Pkg instance={instance} data={data} share={share} />
+          component[instance] = <Pkg instance={instance} data={data} share={share} />;
         }
       }
     } else {
