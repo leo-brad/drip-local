@@ -1,6 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom/client';
 import style from './index.module.css';
 import OfflineComponent from '~/render/script/component/OfflineComponent';
+import renderToNode from '~/render/script/lib/renderToNode';
 import check from '~/render/script/lib/check';
 import global from '~/render/script/obj/global';
 
@@ -20,6 +22,7 @@ class Content extends OfflineComponent {
     this.state = {
       instance,
     };
+    this.roots = {};
     this.id = new Date().getTime().toString();
     this.instance = instance;
     this.updateView = this.updateView.bind(this);
@@ -36,9 +39,7 @@ class Content extends OfflineComponent {
     } = global;
     if (focus) {
       const { instance, } = global;
-      this.setState({
-        instance,
-      });
+      this.setInstance(instance);
       await this.sendMountAndUnmount();
     }
   }
@@ -56,12 +57,13 @@ class Content extends OfflineComponent {
     const dom = this.getDom();
     let ans = false;
     if (dom) {
-      const content = dom.children[0];
-      if (content) {
-        const {
-          instance,
-        } = global;
-        if (content.id.includes(instance)) {
+      const div = dom.children[0];
+      const {
+        instance,
+      } = global;
+      if (div && div.id === instance) {
+        const content = div.children[0];
+        if (content) {
           ans = true;
         }
       }
@@ -118,11 +120,11 @@ class Content extends OfflineComponent {
     emitter.remove('main/reset', this.updateView);
   }
 
-  render() {
-    const { id, } = this;
-    const {
-      instance,
-    } = this.state;
+  setInstance(instance) {
+    this.renderElement(this.getComponent(instance), instance);
+  }
+
+  getComponent(instance) {
     const {
       content,
     } = global;
@@ -140,9 +142,24 @@ class Content extends OfflineComponent {
     } else {
       component[instance] = null;
     }
-    return(
-      <div id={id} className={style.content}>{component[instance]}</div>
-    );
+    return component[instance];
+  }
+
+  renderElement(component, instance) {
+    const dom = this.getDom();
+    if (dom) {
+      const node = renderToNode(<div id={instance} />);
+      dom.innerHTML = '<div id="' + instance + '" style="height: 100%" />';
+      const div = document.getElementById(instance);
+      const root = ReactDOM.createRoot(div);
+      root.render(component);
+      this.roots[instance] = root;
+    }
+  }
+
+  render() {
+    const { id, } = this;
+    return <div id={id} className={style.content} />;
   }
 }
 
