@@ -1,6 +1,6 @@
 import global from '~/render/script/obj/global';
 
-export default function onlineAndOffline(store) {
+export default function onlineAndOffline() {
   const {
     share: {
       emitter,
