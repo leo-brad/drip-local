@@ -33,7 +33,6 @@ export default function dealEvent() {
       global.share.focus = false;
       const event = 'window/blur';
       emitter.send(event);
-      emitter.send(instance, [event]);
     } else {
       blurTimes += 1;
     }
@@ -47,7 +46,6 @@ export default function dealEvent() {
     } = global;
     if (flag) {
       emitter.send(event);
-      emitter.send(instance, event);
       flag = false;
       setTimeout(() => {
         flag = true;
