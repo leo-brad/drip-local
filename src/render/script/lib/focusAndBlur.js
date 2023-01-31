@@ -1,5 +1,16 @@
 import global from '~/render/script/obj/global';
 
+async function block() {
+  await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, 750);
+  });
+  if (!global.share.focus) {
+    block();
+  }
+}
+
 export default function onlineAndOffline() {
   const {
     share: {
@@ -23,5 +34,6 @@ export default function onlineAndOffline() {
     } else {
       blurTimes += 1;
     }
+    block();
   });
 }
