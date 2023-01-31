@@ -7,7 +7,7 @@ const {
   },
 } = global;
 
-class ResizeOffline extends React.Component {
+class OfflineResize extends React.Component {
   constructor(props) {
     super(props);
     this.resize = this.resize.bind(this);
@@ -36,4 +36,4 @@ class ResizeOffline extends React.Component {
   }
 }
 
-export default ResizeOffline;
+export default OfflineResize;

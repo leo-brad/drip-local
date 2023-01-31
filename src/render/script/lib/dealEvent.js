@@ -39,12 +39,19 @@ export default function dealEvent() {
     }
     block();
   });
+  let flag = true;
   window.addEventListener('resize', (e) => {
     const event = 'window/resize';
-    emitter.send(event);
     const {
       instance,
     } = global;
-    emitter.send(instance, event);
+    if (flag) {
+      emitter.send(event);
+      emitter.send(instance, event);
+      flag = false;
+      setTimeout(() => {
+        flag = true;
+      }, 1000 / 29);
+    }
   });
 }

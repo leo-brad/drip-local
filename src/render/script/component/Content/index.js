@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import style from './index.module.css';
-import Offline from '~/render/script/component/Offline';
+import OfflineResize from '~/render/script/component/OfflineResize';
 import renderToNode from '~/render/script/lib/renderToNode';
 import check from '~/render/script/lib/check';
 import global from '~/render/script/obj/global';
@@ -15,7 +15,7 @@ const {
   content,
 } = global;
 
-class Content extends Offline {
+class Content extends OfflineResize {
   constructor(props) {
     super(props);
     const { instance, } = global;
@@ -106,6 +106,13 @@ class Content extends Offline {
     const { instance, } = global;
     emitter.on(instance, this.dealEvent);
     this.instance = instance;
+  }
+
+  resize() {
+    const {
+      instance,
+    } = global;
+    this.setInstance(instance);
   }
 
   bind() {

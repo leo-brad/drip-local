@@ -16,7 +16,7 @@ class Exception extends React.Component {
   componentDidMount() {
     const { error, } = global;
     this.setState({
-      error: error,
+      error,
     });
   }
 
@@ -26,7 +26,7 @@ class Exception extends React.Component {
     if (error) {
       e = <div>{error.toString()}</div>;
     } else {
-      e = <div></div>
+      e = <div/>;
     }
     return e;
   }

@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import style from './index.module.css';
-import PointLineOffline from '~/render/script/component/PointLineOffline';
+import PointLineOfflineResize from '~/render/script/component/PointLineOfflineResize';
 import TabMiddleButton from '~/render/script/component/TabMiddleButton';
 import TabEdgeButton from '~/render/script/component/TabEdgeButton';
 import check from '~/render/script/lib/check';
+import formateUnit from '~/render/script/lib/formateUnit';
 import renderToNode from '~/render/script/lib/renderToNode';
 import global from '~/render/script/obj/global';
 
@@ -15,14 +16,17 @@ const {
   instances,
 } = global;
 
-class TabButtons extends PointLineOffline {
+class TabButtons extends PointLineOfflineResize {
   constructor(props) {
     super(props);
     const { id, } = this;
     this.empty = 0;
     this.data = [];
     this.roots = {};
+    this.flag = true;
     this.hasData = false;
+    this.position = 0;
+    this.step = this.step.bind(this);
     this.checkButtons = this.checkButtons.bind(this);
     this.checkEmpty = this.checkEmpty.bind(this);
     this.checkEdgeButton = this.checkEdgeButton.bind(this);
@@ -34,12 +38,39 @@ class TabButtons extends PointLineOffline {
     const { id, } = this;
     const ul = document.getElementById(id);
     this.ul = ul;
-    this.width = ul.offsetWidth - 23;
-    this.left = ul.offsetLeft;
+    this.right = ul.clientWidth - 23;
+    this.left = 0;
   }
 
-  async positionChange(k) {
-    await this.setPosition(k);
+  async positionChange(p) {
+    await this.setPosition(p);
+    this.position = p;
+  }
+
+  async resize() {
+    const { flag, } = this;
+    if (flag) {
+      this.flag = false;
+      setTimeout(async () => {
+        this.flag = true;
+      }, 100);
+      await this.resizeComponent();
+    } else {
+      this.dirty = true;
+    }
+    setTimeout(async () => {
+      const { dirty, } = this;
+      if (dirty) {
+        await this.resizeComponent();
+        this.dirty = false;
+      }
+    }, 250);
+  }
+
+  async resizeComponent() {
+    const { ul, position, } = this;
+    this.right = ul.clientWidth - 23;
+    await this.setPosition(position);
   }
 
   bind() {
@@ -124,6 +155,7 @@ class TabButtons extends PointLineOffline {
 
   async setPosition(position) {
     const { ul, } = this;
+    ul.style.visibility = 'hidden';
     ul.innerHTML = '';
     this.clean();
     global.position = position;
@@ -132,7 +164,6 @@ class TabButtons extends PointLineOffline {
     this.count = 0;
     this.addItem(2);
     this.count += 1;
-    ul.style.visibility = 'hidden';
     while (true) {
       const { count, } = this;
       this.r = count % 2;
@@ -154,7 +185,36 @@ class TabButtons extends PointLineOffline {
     await check(this.checkButtons);
     this.clearEmpty();
     await this.addEdgeButton();
-    ul.style.visibility = 'visible';
+    this.transition();
+  }
+
+  step() {
+    const { begin, } = this;
+    if (begin) {
+      this.opacity = 0;
+    } else {
+      this.opacity += 13;
+    }
+    const { opacity, } = this;
+    if (opacity < 100) {
+      const { ul, } = this;
+      ul.style.opacity = formateUnit(this.opacity, '%');
+      window.requestAnimationFrame(this.step);
+    } else {
+      const { ul, } = this;
+      ul.style.opacity = null;
+    }
+    if (begin) {
+      const { ul, } = this;
+      ul.style.visibility = 'visible';
+      this.begin = false;
+    }
+  }
+
+  transition() {
+    const { ul, } = this;
+    this.begin = true;
+    window.requestAnimationFrame(this.step);
   }
 
   clearEmpty() {
@@ -292,7 +352,7 @@ class TabButtons extends PointLineOffline {
     const width = await this.getWidth(key);
     const left = await this.getLeft(key);
     const { num, } = this;
-    return left + width / 2 - num;
+    return left + width - num;
   }
 
   async detectEdge() {
@@ -304,7 +364,7 @@ class TabButtons extends PointLineOffline {
           const { right, } = global;
           if (right !== undefined) {
             const right = await this.getRight(this.key);
-            if (right > this.width || right === 0) {
+            if (right > this.right || right === 0) {
               ans = true;
               const { li, } = this;
               li.remove();

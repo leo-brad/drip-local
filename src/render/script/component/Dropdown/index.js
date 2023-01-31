@@ -1,9 +1,10 @@
 import React from 'react';
 import style from './index.module.css';
 import ReactDOM from 'react-dom/client';
-import RegionListOffline from '~/render/script/component/RegionListOffline';
+import RegionListOfflineResize from '~/render/script/component/RegionListOfflineResize';
 import check from '~/render/script/lib/check';
 import renderToNode from '~/render/script/lib/renderToNode';
+import formateUnit from '~/render/script/lib/formateUnit';
 import global from '~/render/script/obj/global';
 
 const {
@@ -11,10 +12,6 @@ const {
     emitter,
   },
 } = global;
-
-function formatUnit(val) {
-  return val + 'px';
-}
 
 function getIndex(i) {
   const { type, } = global;
@@ -33,7 +30,7 @@ function getIndex(i) {
   return ans;
 }
 
-class Dropdown extends RegionListOffline {
+class Dropdown extends RegionListOfflineResize {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,6 +59,12 @@ class Dropdown extends RegionListOffline {
       emitter.send('dropdown', ['blur']);
       e.preventDefault();
       e.stopPropagation();
+      this.close();
+    }
+  }
+
+  resize() {
+    if (open) {
       this.close();
     }
   }
@@ -251,7 +254,7 @@ class Dropdown extends RegionListOffline {
     const { height, open, } = this.state;
     let list = null;
     if (open) {
-      list = <ul id={id} className={style.dropdown} style={{ height: formatUnit(height) }} />;
+      list = <ul id={id} className={style.dropdown} style={{ height: formateUnit(height, 'px') }} />;
     }
     return list;
   }
