@@ -23,6 +23,7 @@ export default function onlineAndOffline() {
     const { instance, } = global;
     global.share.focus = true;
     const event = 'window/focus';
+    emitter.send(event);
     emitter.send(instance, [event]);
   });
   window.addEventListener('blur', (e) => {
@@ -30,6 +31,7 @@ export default function onlineAndOffline() {
       const { instance, } = global;
       global.share.focus = false;
       const event = 'window/blur';
+      emitter.send(event);
       emitter.send(instance, [event]);
     } else {
       blurTimes += 1;

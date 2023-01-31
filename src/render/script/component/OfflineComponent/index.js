@@ -8,6 +8,12 @@ const {
 } = global;
 
 class OfflineComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.bind = this.bind.bind(this);
+    this.remove = this.remove.bind(this);
+  }
+
   componentDidMount() {
     const { ownDidMount, } = this;
     if (typeof ownDidMount === 'function') {
