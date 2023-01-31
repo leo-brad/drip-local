@@ -11,13 +11,14 @@ async function block() {
   }
 }
 
-export default function onlineAndOffline() {
-  const {
-    share: {
-      emitter,
-    },
-    component,
-  } = global;
+const {
+  share: {
+    emitter,
+  },
+  component,
+} = global;
+
+export default function dealEvent() {
   let blurTimes = 0;
   window.addEventListener('focus', (e) => {
     const { instance, } = global;
@@ -37,5 +38,13 @@ export default function onlineAndOffline() {
       blurTimes += 1;
     }
     block();
+  });
+  window.addEventListener('resize', (e) => {
+    const event = 'window/resize';
+    emitter.send(event);
+    const {
+      instance,
+    } = global;
+    emitter.send(instance, event);
   });
 }

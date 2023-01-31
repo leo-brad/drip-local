@@ -133,7 +133,7 @@ class Dropdown extends RegionListOffline {
         this.height = height;
       }
     }
-    const newHeight = height - this.height * 0.05;
+    const newHeight = height - this.height * 0.06;
     this.setState({
       height: newHeight,
     });

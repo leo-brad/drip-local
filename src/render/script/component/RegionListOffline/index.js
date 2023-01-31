@@ -1,7 +1,7 @@
 import React from 'react';
-import OfflineComponent from '~/render/script/component/OfflineComponent';
+import Offline from '~/render/script/component/Offline';
 
-class RegionListOffline extends OfflineComponent {
+class RegionListOffline extends Offline {
   constructor(props) {
     super(props);
 

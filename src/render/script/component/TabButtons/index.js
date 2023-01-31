@@ -25,6 +25,7 @@ class TabButtons extends PointLineOffline {
     this.hasData = false;
     this.checkButtons = this.checkButtons.bind(this);
     this.checkEmpty = this.checkEmpty.bind(this);
+    this.checkEdgeButton = this.checkEdgeButton.bind(this);
     this.updateView = this.updateView.bind(this);
     this.positionChange = this.positionChange.bind(this);
   }
@@ -33,7 +34,7 @@ class TabButtons extends PointLineOffline {
     const { id, } = this;
     const ul = document.getElementById(id);
     this.ul = ul;
-    this.width = ul.offsetWidth - 22;
+    this.width = ul.offsetWidth - 23;
     this.left = ul.offsetLeft;
   }
 
@@ -85,8 +86,7 @@ class TabButtons extends PointLineOffline {
   }
 
   checkButtons() {
-    const { id, } = this;
-    const ul = document.getElementById(id);
+    const { id, ul, } = this;
     let ans = false;
     if (ul) {
       let time = 0;
@@ -101,6 +101,21 @@ class TabButtons extends PointLineOffline {
               break;
             }
           }
+        }
+      }
+    }
+    return ans;
+  }
+
+  checkEdgeButton() {
+    const { ul, } = this;
+    let ans = false;
+    if (ul) {
+      let time = 0;
+      for (let li of ul.children) {
+        const id = li.id;
+        if (id.includes('l') || id.includes('r')) {
+          ans = true;
         }
       }
     }
@@ -138,7 +153,7 @@ class TabButtons extends PointLineOffline {
     }
     await check(this.checkButtons);
     this.clearEmpty();
-    this.addEdgeButton();
+    await this.addEdgeButton();
     ul.style.visibility = 'visible';
   }
 
@@ -154,8 +169,14 @@ class TabButtons extends PointLineOffline {
     }
   }
 
-  addEdgeButton() {
+  async addEdgeButton() {
     const { ul, } = this;
+    for (const child of ul.children) {
+      const id = child.id;
+      if (id.includes('l') || id.includes('r')) {
+        child.remove();
+      }
+    }
     const { left, right, } = global;
     const types = [];
     const components = [];
@@ -196,6 +217,9 @@ class TabButtons extends PointLineOffline {
         }
       }
     });
+    if (types.length > 0) {
+      await check(this.checkEdgeButton);
+    }
   }
 
   addItem(t) {
@@ -262,6 +286,13 @@ class TabButtons extends PointLineOffline {
       }
     }
     return ans;
+  }
+
+  async getRight(key) {
+    const width = await this.getWidth(key);
+    const left = await this.getLeft(key);
+    const { num, } = this;
+    return left + width / 2 - num;
   }
 
   async detectEdge() {

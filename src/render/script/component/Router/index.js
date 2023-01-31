@@ -2,7 +2,6 @@ import React from 'react';
 import '~/render/style/index.css';
 import global from '~/render/script/obj/global';
 import Home from '~/render/script/page/Home';
-import OfflineComponent from '~/render/script/component/OfflineComponent';
 
 const {
   share: {
@@ -11,7 +10,7 @@ const {
   location,
 } = global;
 
-class Router extends OfflineComponent {
+class Router extends React.Component {
   constructor(props) {
     super(props);
     this.route =  {

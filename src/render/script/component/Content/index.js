@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import style from './index.module.css';
-import OfflineComponent from '~/render/script/component/OfflineComponent';
+import Offline from '~/render/script/component/Offline';
 import renderToNode from '~/render/script/lib/renderToNode';
 import check from '~/render/script/lib/check';
 import global from '~/render/script/obj/global';
@@ -15,7 +15,7 @@ const {
   content,
 } = global;
 
-class Content extends OfflineComponent {
+class Content extends Offline {
   constructor(props) {
     super(props);
     const { instance, } = global;

@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.module.css';
-import OfflineComponent from '~/render/script/component/OfflineComponent';
+import Offline from '~/render/script/component/Offline';
 import global from '~/render/script/obj/global';
 
 const {
@@ -10,7 +10,7 @@ const {
   status,
 } = global;
 
-class TabEdgeButton extends OfflineComponent {
+class TabEdgeButton extends Offline {
   constructor(props) {
     super(props);
     const { t, } = this.props;

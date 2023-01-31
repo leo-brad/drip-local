@@ -7,7 +7,7 @@ const {
   },
 } = global;
 
-class OfflineComponent extends React.Component {
+class Offline extends React.Component {
   constructor(props) {
     super(props);
     this.bind = this.bind.bind(this);
@@ -35,4 +35,4 @@ class OfflineComponent extends React.Component {
   }
 }
 
-export default OfflineComponent;
+export default Offline;

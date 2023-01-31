@@ -7,7 +7,7 @@
   border-color: rgba(105, 105, 105, 0.5)
   padding: 8.5px 2.5px 8.5px 2.5px
   background-color: rgb(180, 180, 180)
-  box-shadow: -4px -4px 3px rgba(150, 150, 150, 0.5) inset
+  box-shadow: -4px -4px 3px rgba(160, 160, 160, 0.5) inset
 .active
   background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(215, 215, 215))
   box-shadow:

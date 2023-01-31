@@ -1,8 +1,8 @@
 import React from 'react';
 import check from '~/render/script/lib/check';
-import OfflineComponent from '~/render/script/component/OfflineComponent';
+import Offline from '~/render/script/component/Offline';
 
-class PointLineOffline extends OfflineComponent {
+class PointLineOffline extends Offline {
   constructor(props) {
     super(props);
     this.isUpdate = false;
@@ -68,7 +68,7 @@ class PointLineOffline extends OfflineComponent {
   async getRight(key) {
     const width = await this.getWidth(key);
     const left = await this.getLeft(key);
-    return left + width;
+    return left + width / 2;
   }
 
   getKey(key) {

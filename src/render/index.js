@@ -4,10 +4,10 @@ import global from '~/render/script/obj/global';
 import Router from '~/render/script/component/Router';
 import communicate from '~/render/script/lib/communicate';
 import syncData from '~/render/script/lib/syncData';
-import focusAndBlur from '~/render/script/lib/focusAndBlur';
+import dealEvent from '~/render/script/lib/dealEvent';
 
 syncData();
-focusAndBlur();
+dealEvent();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = <Router />;
