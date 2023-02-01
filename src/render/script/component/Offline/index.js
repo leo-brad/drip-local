@@ -10,6 +10,7 @@ const {
 class Offline extends React.Component {
   constructor(props) {
     super(props);
+    this.bind = this.bind.bind(this);
     this.remove = this.remove.bind(this);
     this.focus = this.focus.bind(this);
   }
