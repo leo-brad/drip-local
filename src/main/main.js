@@ -19,9 +19,9 @@ function createWindow() {
       preload: path.resolve(__dirname, 'preload.js'),
     },
   });
-  win.setMinimumSize(805, 550);
+  win.setMinimumSize(805, 510);
   win.loadFile('./index.html');
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
   dealMessage();
 }
 
