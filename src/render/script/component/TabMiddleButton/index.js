@@ -45,13 +45,9 @@ class TabMiddleButton extends Offline {
     if (focus) {
       const [event] = data;
       switch (event) {
-        case 'status/update': {
-          const { i, } = this.props;
-          this.setState({
-            status: status[i],
-          });
+        case 'status/update':
+          this.updateStatus();
           break;
-        }
         case 'instance/change':
         case 'instance/add/first': {
           const { instance, } = global;
@@ -70,10 +66,22 @@ class TabMiddleButton extends Offline {
     });
   }
 
+  updateStatus() {
+    const { i, } = this.props;
+    this.setState({
+      status: status[i],
+    });
+  }
+
+  receiveOverdue() {
+    this.updateStatus();
+  }
+
   bind() {
     const { i, } = this.props;
     emitter.on('instance/change', this.changeInstance);
     emitter.on(i, this.dealEvent);
+    this.receiveOverdue();
     const dom = this.getDom();
     if (dom) {
       dom.addEventListener('click', this.onClick);

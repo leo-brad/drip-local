@@ -8,7 +8,9 @@ class Emitter {
     const cbs = callbacks[event];
     if (Array.isArray(cbs)) {
       cbs.forEach((callback) => {
-        callback(data);
+        if (typeof callback === 'function') {
+          callback(data);
+        }
       });
     }
   }

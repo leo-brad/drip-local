@@ -21,7 +21,7 @@ function createWindow() {
   });
   win.setMinimumSize(805, 510);
   win.loadFile('./index.html');
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
   dealMessage();
 }
 
