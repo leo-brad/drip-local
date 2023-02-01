@@ -1,5 +1,6 @@
 import React from 'react';
 import global from '~/render/script/obj/global';
+import Offline from '~/render/script/component/Offline';
 
 const {
   share: {
@@ -7,7 +8,7 @@ const {
   },
 } = global;
 
-class OfflineResize extends React.Component {
+class OfflineResize extends Offline {
   constructor(props) {
     super(props);
     this.resize = this.resize.bind(this);
@@ -19,7 +20,7 @@ class OfflineResize extends React.Component {
       this.ownDidMount();
     }
     this.bind();
-    emitter.on('window/focus', this.bind);
+    emitter.on('window/focus', this.focus);
     emitter.on('window/blur', this.remove);
     emitter.on('window/resize', this.resize);
   }
@@ -30,7 +31,7 @@ class OfflineResize extends React.Component {
       this.ownWillUnmount();
     }
     this.remove();
-    emitter.remove('window/focus', this.bind);
+    emitter.remove('window/focus', this.focus);
     emitter.remove('window/blur', this.remove);
     emitter.remove('window/resize', this.resize);
   }

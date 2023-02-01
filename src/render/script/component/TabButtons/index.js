@@ -48,23 +48,32 @@ class TabButtons extends PointLineOfflineResize {
   }
 
   async resize() {
-    const { flag, } = this;
-    if (flag) {
-      this.flag = false;
-      setTimeout(async () => {
-        this.flag = true;
-      }, 100);
-      await this.resizeComponent();
+    let dw = 0;
+    if (this.w) {
+      this.w = window.clientWidth;
     } else {
-      this.dirty = true;
+      const { w, } = this;
+      dw = window.clientWidth - w;
     }
-    setTimeout(async () => {
-      const { dirty, } = this;
-      if (dirty) {
+    if (Math.abs(dw) > 0) {
+      const { flag, } = this;
+      if (flag) {
+        this.flag = false;
+        setTimeout(async () => {
+          this.flag = true;
+        }, 100);
         await this.resizeComponent();
-        this.dirty = false;
+      } else {
+        this.dirty = true;
+        setTimeout(async () => {
+          const { dirty, } = this;
+          if (dirty) {
+            await this.resizeComponent();
+            this.dirty = false;
+          }
+        }, 250);
       }
-    }, 250);
+    }
   }
 
   async resizeComponent() {
@@ -364,12 +373,14 @@ class TabButtons extends PointLineOfflineResize {
           const { right, } = global;
           if (right !== undefined) {
             const right = await this.getRight(this.key);
-            if (right > this.right || right === 0) {
+            if (right > this.right || right <= 0) {
               ans = true;
               const { li, } = this;
-              li.remove();
-              this.num -= 1;
-              global.right = this.idx - 1;
+              if (li) {
+                li.remove();
+                this.num -= 1;
+                global.right = this.idx - 1;
+              }
             }
           }
           break;
@@ -378,12 +389,14 @@ class TabButtons extends PointLineOfflineResize {
           const { left, }= global;
           if (left !== undefined) {
             const left = await this.getLeft(this.key);
-            if (left < this.left || left === 0) {
+            if (left < this.left || left <= 0) {
               ans = true;
               const { li, } = this;
-              li.remove();
-              this.num -= 1;
-              global.left = this.idx + 1;
+              if (li) {
+                li.remove();
+                this.num -= 1;
+                global.left = this.idx + 1;
+              }
             }
           }
           break;
