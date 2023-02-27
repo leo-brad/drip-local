@@ -13,13 +13,11 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
-    "@fortawesome/fontawesome-free": "^5.15.4",
     "electron": "^17.0.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-router-dom": "^6.2.1"
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.8",

@@ -1,17 +1,16 @@
 @import "normalize.css"
-@import "@fortawesome/fontawesome-free"
 
 @font-face
-  font-family: 'Fa Brands'
+  font-family: 'Font Awesome'
   src: url('../font/fa-brands-400.woff2') format('woff2')
 @font-face
-  font-family: 'Fa Regular'
+  font-family: 'Font Awesome'
   src: url('../font/fa-regular-400.woff2') format('woff2')
 @font-face
-  font-family: 'Fa Solid'
+  font-family: 'Font Awesome'
   src: url('../font/fa-solid-900.woff2') format('woff2')
 @font-face
-  font-family: 'Fa Solid'
+  font-family: 'Font Awesome'
   src: url('../font/fa-solid-900.woff2') format('woff2')
 @font-face
   font-family: 'Montserrat Thin'
@@ -24,4 +23,4 @@ body
 #root
   height: 100%
   font-family: Lato,'Helvetica Neue',Arial,Helvetica, sans-serif,
-    'Fa Brands','Fa Regular','Fa Solid', 'Montserrat Thin'
+    'Font Awesome', 'Montserrat Thin'

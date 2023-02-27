@@ -5,3 +5,6 @@
   border-radius: 4px
   background-color: #444
   padding: 4px 4px 4px 4px
+.icon:before
+  display: inline-block
+  content: '\f2db'

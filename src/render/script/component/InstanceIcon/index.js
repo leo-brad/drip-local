@@ -4,7 +4,7 @@ import style from './index.module.css';
 class Icon extends React.Component {
   render() {
     return (
-      <i className={[style.icon, 'fa', 'fa-microchip'].join(' ')}>
+      <i className={[style.icon].join(' ')}>
         {this.props.children}
       </i>
     );
