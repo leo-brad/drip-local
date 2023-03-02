@@ -23,6 +23,8 @@ export default function renderToNode(component) {
           case 'className':
             elem.setAttribute('class', props[k]);
             break;
+          case 'children':
+            break;
           default:
           elem.setAttribute(k, props[k]);
         }
