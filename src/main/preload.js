@@ -13,15 +13,13 @@ contextBridge.exposeInMainWorld(
   }
 );
 
-setTimeout(() => {
+function main() {
   try {
-    const message = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'message'))
-    );
+    const json = fs.readFileSync(path.join(__dirname, 'message');
+    const message = JSON.parse(json));
     const { argv, } = message;
     const [configString, projectPath] = argv;
     const config = JSON.parse(configString);
-
     process.chdir(projectPath);
     const emitter = new EventEmitter();
     const pps = new Instance(config, emitter).getPriProcs();
@@ -29,4 +27,6 @@ setTimeout(() => {
   } catch (e) {
     ipc.send('drip/error', e);
   }
-}, 20);
+}
+
+setTimeout(main, 20);
