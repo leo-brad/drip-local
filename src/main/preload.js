@@ -2,7 +2,9 @@ import path from 'path';
 import fs from 'fs';
 import { contextBridge, } from 'electron';
 import Ipc from '~/main/class/Ipc';
-import configExec from '~/main/lib/configExec';
+import EventEmitter from 'events';
+import Instance from '~/main/class/Instance';
+import EventSchedule from '~/main/class/EventSchedule';
 
 const ipc = new Ipc();
 contextBridge.exposeInMainWorld(
@@ -18,9 +20,12 @@ setTimeout(() => {
     );
     const { argv, } = message;
     const [configString, projectPath] = argv;
-
     const config = JSON.parse(configString);
-    configExec(config, projectPath, ipc);
+
+    process.chdir(projectPath);
+    const emitter = new EventEmitter();
+    const pps = new Instance(config, emitter).getPriProcs();
+    new EventSchedule(pps, emitter, config, ipc).start();
   } catch (e) {
     ipc.send('drip/error', e);
   }
