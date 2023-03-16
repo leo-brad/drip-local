@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import net from 'net';
 import { contextBridge, } from 'electron';
 import Ipc from '~/main/class/Ipc';
 import EventEmitter from 'events';
@@ -13,13 +14,18 @@ contextBridge.exposeInMainWorld(
   }
 );
 
-function main() {
+async function main() {
   try {
-    const json = fs.readFileSync(path.join(__dirname, 'message');
-    const message = JSON.parse(json));
-    const { argv, } = message;
-    const [configString, projectPath] = argv;
-    const config = JSON.parse(configString);
+    const socket = net.connect({
+      port: 8124,
+    });
+    const argv = await new Promise((resolve, reject) => {
+      socket.on('data', (data) => {
+        resolve(data.toString().split(' '));
+      });
+    });
+    const [configJson, projectPath] = argv;
+    const config = JSON.parse(configJson);
     process.chdir(projectPath);
     const emitter = new EventEmitter();
     const pps = new Instance(config, emitter).getPriProcs();
@@ -29,4 +35,4 @@ function main() {
   }
 }
 
-setTimeout(main, 20);
+setTimeout(main, 9);

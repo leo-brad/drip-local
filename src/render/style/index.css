@@ -2,16 +2,16 @@
 
 @font-face
   font-family: 'Font Awesome'
-  src: url('../font/fa-brands-400.woff2') format('woff2')
+  src: url('../font/fa-brands-400.ttf') format('woff2')
 @font-face
   font-family: 'Font Awesome'
-  src: url('../font/fa-regular-400.woff2') format('woff2')
+  src: url('../font/fa-regular-400.ttf') format('woff2')
 @font-face
   font-family: 'Font Awesome'
-  src: url('../font/fa-solid-900.woff2') format('woff2')
+  src: url('../font/fa-solid-900.ttf') format('woff2')
 @font-face
   font-family: 'Font Awesome'
-  src: url('../font/fa-solid-900.woff2') format('woff2')
+  src: url('../font/fa-solid-900.ttf') format('woff2')
 @font-face
   font-family: 'Montserrat Thin'
   src: url('../font/Montserrat-Thin.ttf') format('ttf')

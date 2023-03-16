@@ -1,15 +1,7 @@
-import fs from 'fs';
-import { app, BrowserWindow, } from 'electron';
 import path from 'path';
-
-function dealMessage() {
-  const [_1, _2, ...argv] = process.argv;
-  const message = { argv, };
-  fs.writeFileSync(
-    path.join(__dirname, 'message'),
-    JSON.stringify(message)
-  );
-}
+import fs from 'fs';
+import net from 'net';
+import { app, BrowserWindow, } from 'electron';
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -22,7 +14,12 @@ function createWindow() {
   win.setMinimumSize(805, 510);
   win.loadFile('./index.html');
   win.webContents.openDevTools();
-  dealMessage();
+  const server = net.createServer((s) => {
+    const [_1, _2, ...argv] = process.argv;
+    s.write(argv.join(' '));
+    server.close();
+  });
+  server.listen(8124);
 }
 
 app.whenReady().then(() => {
