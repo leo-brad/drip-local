@@ -33,8 +33,9 @@ class Router extends React.Component {
     });
   }
 
-  showError() {
-    this.addRoute('/error', require('~/render/script/page/Exception'));
+  async showError() {
+    const Exception = await import('~/render/script/page/Exception');
+    this.addRoute('/error', Exception);
     location.to('/error');
   }
 
