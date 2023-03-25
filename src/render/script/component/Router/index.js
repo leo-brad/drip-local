@@ -35,7 +35,7 @@ class Router extends React.Component {
 
   async showError() {
     const Exception = await import('~/render/script/page/Exception');
-    this.addRoute('/error', Exception);
+    this.addRoute('/error', Exception.default);
     location.to('/error');
   }
 

@@ -35,4 +35,4 @@ async function main() {
   }
 }
 
-setTimeout(main, 10);
+setTimeout(main, 9);
