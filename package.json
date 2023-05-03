@@ -4,7 +4,7 @@
   "main": "index.js",
   "author": "eric hart",
   "license": "MIT",
-  "description": "A local pattern for drip.",
+  "description": "Drip local pattren program.",
   "scripts": {
     "lint": "eslint ./src",
     "build": "gulp build",
