@@ -2,7 +2,7 @@
   "name": "drip-gui",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "eric hart",
+  "author": "Leo Brad",
   "license": "MIT",
   "description": "Drip local pattren program.",
   "scripts": {
